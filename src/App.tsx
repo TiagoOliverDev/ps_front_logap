@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+import React from 'react'
+import './App.css'
+import { AppDrawerProvider } from './shared/contexts'
+import { DrawerMenur } from './shared/components/drawer/DrawerMenu'
+import { AppRoutes } from "./shared/routes"; 
+import { BrowserRouter} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom"
+import { Home } from './pages'; 
 
-function App() {
+const App: React.FC = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <AppDrawerProvider>
+        <DrawerMenur>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/*" element={<Home />} />
+            </Routes>
+          </BrowserRouter>
+        </DrawerMenur>
+    </AppDrawerProvider>
+  )
 }
 
-export default App;
+export default App
+
+
+
+
