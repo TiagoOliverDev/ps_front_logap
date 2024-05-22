@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 
 
-
 export const Home: React.FC = () => {
 
     // const [name, setName] = useState<string>('')
@@ -23,7 +22,6 @@ export const Home: React.FC = () => {
     //     navigate("/")
     // }
     
-
     return(
         <HomeMaster
             title='teste'

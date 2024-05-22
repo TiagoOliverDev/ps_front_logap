@@ -5,32 +5,25 @@ import {
     Drawer,
     List,
     useMediaQuery,
-    useTheme,
-    Icon
+    useTheme
 } from "@mui/material";
 
 import { useAppDrawerContext } from "../../contexts/DrawerContext";
-import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
-// import { Logout } from "@mui/icons-material";
-
+// import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { IMenuLateralProps } from "../../../@types/IMenuLateralProps";
 import { ListItemLink } from "./ListItemLink"; 
 
 
-
-export const DrawerMenur: React.FC<IMenuLateralProps> = ({ children }) => {
-    // const { toggleTheme } = useAppThemeContext();
-    // const { logout } = useAuthContext();
-
+export const DrawerMenu: React.FC<IMenuLateralProps> = ({ children }) => {
     const theme = useTheme();
     const smDown = useMediaQuery(theme.breakpoints.down("sm"));
-
     const { isDrawer, toggleDrawerOpen, drawerOptions } = useAppDrawerContext();
 
     return (
         <>
-            <Drawer 
-                open={isDrawer} variant={smDown ? "temporary" : "permanent"} 
+            <Drawer
+                open={isDrawer}
+                variant={smDown ? "temporary" : "permanent"}
                 onClose={toggleDrawerOpen}
                 sx={{
                     position: 'fixed',
@@ -46,10 +39,9 @@ export const DrawerMenur: React.FC<IMenuLateralProps> = ({ children }) => {
                         width: { xs: '100%', md: theme.spacing(30) },
                         zIndex: 30,
                     }
-                }}  
+                }}
             >
                 <Box width={theme.spacing(26)} height={"100%"} display={"flex"} flexDirection={"column"}>
-
                     <Box width={"100%"} height={theme.spacing(20)} display={"flex"} alignItems={"center"} justifyContent={"center"}>
                         <Avatar
                             alt="Remy Sharp"
@@ -61,38 +53,17 @@ export const DrawerMenur: React.FC<IMenuLateralProps> = ({ children }) => {
 
                     <Box flex={1}>
                         <List component={"nav"}>
-                            {drawerOptions.map(drawerOptions => (
+                            {drawerOptions.map(drawerOption => (
                                 <ListItemLink
-                                    key={drawerOptions.path}
-                                    label={drawerOptions.label}
-                                    icon={drawerOptions.icon}
-                                    to={drawerOptions.path}
+                                    key={drawerOption.path}
+                                    label={drawerOption.label}
+                                    icon={drawerOption.icon}
+                                    to={drawerOption.path}
                                     onClick={smDown ? toggleDrawerOpen : undefined}
                                 />
                             ))}
                         </List>
                     </Box>
-                    {/* <Box>
-                        <List component={"nav"}>
-                            <ListItemButton onClick={toggleTheme}>
-                                <ListItemIcon>
-                                    <Icon>
-                                        <DarkModeIcon />
-                                        <WbSunnyIcon />
-                                    </Icon>
-                                </ListItemIcon>
-                                <ListItemText primary={"Alterar tema"} />
-                            </ListItemButton>
-                            <ListItemButton onClick={logout}>
-                                <ListItemIcon>
-                                    <Icon>
-                                        <Logout />
-                                    </Icon>
-                                </ListItemIcon>
-                                <ListItemText primary={"Sair"} />
-                            </ListItemButton>
-                        </List>
-                    </Box> */}
                 </Box>
             </Drawer>
 
