@@ -1,12 +1,8 @@
 import { Box, Typography, useTheme, IconButton, useMediaQuery, Theme } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAppDrawerContext } from "../contexts";
+import { ILayoutBasePagesProps } from "../../@types/ILayoutBasePagesProps"; 
 
-interface ILayoutBasePagesProps {
-    children: React.ReactNode;
-    title: string;
-    toobar?: React.ReactNode;
-};
 
 export const HomeMaster: React.FC<ILayoutBasePagesProps> = ({ children, title, toobar }) => {
 
