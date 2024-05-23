@@ -21,11 +21,6 @@ export const HomeMaster: React.FC<ILayoutBasePagesProps> = ({ children, title, t
                         {title}
                     </Typography>
                 </Box>
-                {/* <Box mt={1} ml="48px">
-                    <Typography variant="subtitle1" sx={{ color: '#66BB6A' }}>
-                        Gerencie todos os cadastros abaixo
-                    </Typography>
-                </Box> */}
             </Box>
 
             {toobar && (
