@@ -96,7 +96,7 @@ const ProductsList: React.FC = () => {
     return (
         <Container maxWidth="lg">
             <Box display="flex" justifyContent="space-between" alignItems="center" p={2} sx={{ color: '#616161' }}>
-                <Paper sx={{ padding: 2, backgroundColor: '#0069D9', color: '#F5F5F5', flex: 1, mr: 1 }}>
+                <Paper sx={{ padding: 2, backgroundColor: 'blue', color: '#F5F5F5', flex: 1, mr: 1 }}>
                     <Typography variant="subtitle1">Quantidade Total de Produtos</Typography>
                     <Typography variant="h6">{totalProducts}</Typography>
                 </Paper>

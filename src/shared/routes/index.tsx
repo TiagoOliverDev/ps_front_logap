@@ -1,8 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home, Products, Suppliers } from '../../pages';
+import { Home, Products, Suppliers, Dashboard } from '../../pages';
 import { useEffect } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import { useAppDrawerContext } from "../contexts";
+
 
 export const AppRoutes = () => {
     const { setDrawerOption } = useAppDrawerContext();
@@ -11,7 +12,7 @@ export const AppRoutes = () => {
         setDrawerOption([
             {
                 icon: <HomeIcon />,
-                path: "/",
+                path: "/home",
                 label: "Página Inicial",
             },
             {
@@ -38,7 +39,7 @@ export const AppRoutes = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/fornecedores" element={<Suppliers />} />
             <Route path="/produtos" element={<Products />} />
-            <Route path="/dashboard" element={<Products />} />
+            <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
     );
 };

@@ -1,72 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Card, CardContent, Typography, Avatar, Divider } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Card, CardContent, Typography, CardActions, TextField, Button, Container, Grid } from '@mui/material';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
-// import { DetailTools } from '../../shared/components/detailsTools/DetailTools';
-import { useNavigate } from "react-router-dom";
-import { TextFields } from '@mui/icons-material';
-// import { useAuthContext } from '../../shared/contexts';
-// import { UserService } from '../../shared/services/api/user/UserService';
-import {
+import { Search, Favorite, ShoppingCart, Visibility } from '@mui/icons-material';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarIcon from '@mui/icons-material/Star';
 
-    CardActions,
-    TextField,
-    Button,
-
-} from '@mui/material';
-
-import SupplierForm from '../../shared/components/suppliers/SupplierForm';
-import NestedList from '../../shared/components/suppliers/NestedList';
-import ProductsList from '../../shared/components/poducts/ProductsList';
-import { Container } from '@mui/material';
-import { color } from 'framer-motion';
-
+const categories = ['GERAL', 'Celulares', 'Notebooks', 'Bebidas', 'Eletrônicos', 'Roupas'];
+const products = [
+    { id: 1, name: 'Produto 1', category: 'Celulares', price: 1000, image: 'https://via.placeholder.com/150' },
+    { id: 2, name: 'Produto 2', category: 'Notebooks', price: 2000, image: 'https://via.placeholder.com/150' },
+    { id: 3, name: 'Produto 3', category: 'Bebidas', price: 50, image: 'https://via.placeholder.com/150' },
+    { id: 4, name: 'Produto 4', category: 'Eletrônicos', price: 300, image: 'https://via.placeholder.com/150' },
+    { id: 5, name: 'Produto 5', category: 'Roupas', price: 150, image: 'https://via.placeholder.com/150' },
+    // Adicione mais produtos conforme necessário
+];
 
 export const Home: React.FC = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('GERAL');
 
-    // const [name, setName] = useState<string>('')
-    // const [email, setEmail] = useState<string>('')
-    // const [photoProfile, setPhotoProfile] = useState<string>('')
+    const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
+        (selectedCategory === 'GERAL' ? true : product.category === selectedCategory)
+    );
 
-    const navigate = useNavigate()
-    // const { logout } = useAuthContext()
-
-    // const handleLogout = () => {
-    //     logout()
-    //     navigate("/")
-    // }
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-
-    const handleSave = () => {
-        // Lógica para salvar os dados do fornecedor
-        console.log({ name, email, phone });
-    };
-    
-    return(
-        <HomeMaster
-            title='Painel de controle'
-        >
-
-            <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
-                <Typography color={"#F5F5F5"} variant="h6" textOverflow="ellipsis" whiteSpace="nowrap">
-                    Sessão de Fornecedores
-                </Typography>
-            </Box>
-           
+    return (
+        <HomeMaster title='Bem vindo a sua Home!'>
             <Container>
-                <Box display="flex" justifyContent="space-between" alignItems="flex-start" mt={4}>
-                    {/* <SupplierForm /> */}
-                    <NestedList />
-                    {/* <ProductsList /> */}
+                <Box display="flex" justifyContent="center" alignItems="center" mt={4} mb={4}>
+                    <TextField
+                        style={{color: "#FFFFFF"}}
+                        variant="outlined"
+                        placeholder="Buscar produtos..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        InputProps={{
+                            startAdornment: <Search />,
+                            sx: { borderRadius: '50px', backgroundColor: '#FFFFFF' }
+                        }}
+                        fullWidth
+                    />
                 </Box>
+
+                <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
+                    {categories.map(category => (
+                        <Button 
+                            key={category} 
+                            onClick={() => setSelectedCategory(category)}
+                            variant={selectedCategory === category ? 'contained' : 'outlined'}
+                            sx={{ margin: '0 8px' }}
+                        >
+                            {category}
+                        </Button>
+                    ))}
+                </Box>
+
+                <Grid container spacing={4}>
+                    {filteredProducts.map(product => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+                            <Card style={{borderRadius: '11px', backgroundColor: '#000000'}} >
+                                <img src={product.image} alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                                <CardContent>
+                                    <Typography style={{color: '#616161'}} variant="h6">{product.name}</Typography>
+                                    <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">R$ {product.price}</Typography>
+                                </CardContent>
+                                <CardActions>
+                                    {/* <Button startIcon={<Visibility />} size="small">Ver mais</Button> */}
+                                    <Button startIcon={<StarIcon />} size="small">Favoritar</Button>
+                                    <Button startIcon={<ShoppingCart />} size="small" color="primary">Comprar</Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
             </Container>
-            
-            
-
-            {/* <Divider style={{backgroundColor: "#ccc", marginTop: "30px"}} />
-             */}
-
         </HomeMaster>
-    )
-}
+    );
+};
