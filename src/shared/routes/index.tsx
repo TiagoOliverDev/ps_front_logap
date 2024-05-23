@@ -1,30 +1,45 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home } from '../../pages';
-// import { useAuthContext } from '../contexts';
-// import { IPrivateRouteProps } from '../../@types/IPrivateRouteProps';
+import { Home, Products, Suppliers, Dashboard } from '../../pages';
+import { useEffect } from 'react';
+import HomeIcon from '@mui/icons-material/Home';
+import { useAppDrawerContext } from "../contexts";
 
-interface IPrivateRouteProps {
-    isAuthenticated: boolean;
-    children: any;
-}
-  
 
 export const AppRoutes = () => {
-    // const { isAuthenticated } = useAuthContext();
-  
-    // const PrivateRoute: React.FC<IPrivateRouteProps> = ({ isAuthenticated, children }) => {
-    //     return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
-    // };
+    const { setDrawerOption } = useAppDrawerContext();
+
+    useEffect(() => {
+        setDrawerOption([
+            {
+                icon: <HomeIcon />,
+                path: "/home",
+                label: "Página Inicial",
+            },
+            {
+                icon: <HomeIcon />,
+                path: "/fornecedores",
+                label: "Fornecedores",
+            },
+            {
+                icon: <HomeIcon />,
+                path: "/produtos",
+                label: "Produtos",
+            },
+            {
+                icon: <HomeIcon />,
+                path: "/dashboard",
+                label: "Dashboard",
+            },
+        ]);
+    }, [setDrawerOption]);
 
     return (
-      <Routes>
-            <Route 
-                path="/" 
-                element={
-                        <Home />
-                } 
-            />
-      </Routes>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/fornecedores" element={<Suppliers />} />
+            <Route path="/produtos" element={<Products />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
     );
-  };
-  
+};

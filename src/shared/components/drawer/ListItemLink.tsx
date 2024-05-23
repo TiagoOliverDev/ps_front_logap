@@ -1,9 +1,7 @@
 
 import {
     ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Icon
+    ListItemText
 } from "@mui/material";
 
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
@@ -23,10 +21,34 @@ export const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, on
     };
 
     return (
-        <ListItemButton selected={!!math} onClick={handleClick}>
-            <ListItemIcon>
+        <ListItemButton selected={!!math} onClick={handleClick}
+            sx={{
+                '&.Mui-selected': {
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', 
+                    borderColor: '#2563eb',
+                    color: '#ffffff' 
+                },
+                '&:hover': {
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', 
+                    borderColor: '#2563eb',
+                },
+                backgroundColor: 'rgba(107, 114, 128, 0.2)',
+                borderColor: '#000000',
+                color: '#ffffff', 
+                borderRadius: '5px', 
+                borderWidth: '2px', 
+                textAlign: 'center', 
+                fontWeight: '600', 
+                fontSize: '16px', 
+                marginBottom: '13px',
+                // padding: '8px', 
+                // marginY: '8px', 
+                // width: '100%' 
+            }}
+        >
+            {/* <ListItemIcon>
                 <Icon>{icon}</Icon>
-            </ListItemIcon>
+            </ListItemIcon> */}
             <ListItemText primary={label} />
         </ListItemButton>
     );
