@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box, Card, CardContent, Typography, CardActions, TextField, Button, Container, Grid } from '@mui/material';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
 import { Search, Favorite, ShoppingCart, Visibility } from '@mui/icons-material';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 
 const categories = ['GERAL', 'Celulares', 'Notebooks', 'Bebidas', 'Eletrônicos', 'Roupas'];
@@ -12,7 +11,6 @@ const products = [
     { id: 3, name: 'Produto 3', category: 'Bebidas', price: 50, image: 'https://via.placeholder.com/150' },
     { id: 4, name: 'Produto 4', category: 'Eletrônicos', price: 300, image: 'https://via.placeholder.com/150' },
     { id: 5, name: 'Produto 5', category: 'Roupas', price: 150, image: 'https://via.placeholder.com/150' },
-    // Adicione mais produtos conforme necessário
 ];
 
 export const Home: React.FC = () => {
@@ -25,7 +23,7 @@ export const Home: React.FC = () => {
     );
 
     return (
-        <HomeMaster title='Bem vindo a sua Home!'>
+        <HomeMaster title='Bem vindo a sua HomePage de produtos!'>
             <Container>
                 <Box display="flex" justifyContent="center" alignItems="center" mt={4} mb={4}>
                     <TextField
@@ -66,7 +64,7 @@ export const Home: React.FC = () => {
                                 </CardContent>
                                 <CardActions>
                                     {/* <Button startIcon={<Visibility />} size="small">Ver mais</Button> */}
-                                    <Button startIcon={<StarIcon />} size="small">Favoritar</Button>
+                                    <Button startIcon={<Favorite />} size="small">Favoritar</Button>
                                     <Button startIcon={<ShoppingCart />} size="small" color="primary">Comprar</Button>
                                 </CardActions>
                             </Card>

@@ -15,16 +15,11 @@ import {
     Container
 } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
+import { IColumns } from '../../../@types/IColumns'; 
 
-interface Column {
-    id: 'name' | 'purchase_price' | 'quantity' | 'sale_price' | 'category_id' | 'supplier_id' | 'actions';
-    label: string;
-    minWidth?: number;
-    align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
-    format?: (value: number) => string;
-}
 
-const columns: Column[] = [
+
+const columns: IColumns[] = [
     { id: 'name', label: 'Nome', minWidth: 170 },
     { id: 'purchase_price', label: 'Preço de Compra', minWidth: 100, align: 'right', format: (value: number) => value.toFixed(2) },
     { id: 'quantity', label: 'Quantidade', minWidth: 100, align: 'right' },
@@ -92,7 +87,7 @@ const ProductsList: React.FC = () => {
     const totalProducts = products.length;
     const totalSuppliers = suppliers.length;
     const outOfStockProducts = products.filter(product => product.quantity === 0).length;
-
+    
     return (
         <Container maxWidth="lg">
             <Box display="flex" justifyContent="space-between" alignItems="center" p={2} sx={{ color: '#616161' }}>

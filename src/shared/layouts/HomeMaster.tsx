@@ -1,5 +1,4 @@
-import { Box, Typography, useTheme, IconButton, useMediaQuery, Theme, Icon } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
+import { Box, Typography, IconButton } from "@mui/material";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { useAppDrawerContext } from "../contexts";
 import { ILayoutBasePagesProps } from "../../@types/ILayoutBasePagesProps"; 

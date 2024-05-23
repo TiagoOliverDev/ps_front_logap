@@ -15,16 +15,10 @@ import {
     IconButton
 } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
+import { IColumnsSuppliers } from '../../../@types/IColumnsSuppliers'; 
 
-interface Column {
-    id: 'name' | 'email' | 'phone' | 'actions';
-    label: string;
-    minWidth?: number;
-    align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
-    format?: (value: number) => string;
-}
 
-const columns: Column[] = [
+const columns: IColumnsSuppliers[] = [
     { id: 'name', label: 'Nome', minWidth: 170 },
     { id: 'email', label: 'Email', minWidth: 170 },
     { id: 'phone', label: 'Telefone', minWidth: 100, align: 'right' },
@@ -68,7 +62,7 @@ const outOfStockProducts = products.filter(product => product.quantity === 0).le
 
 const itemsPerPage = 7;
 
-const NestedList: React.FC = () => {
+const SuppliersList: React.FC = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
 
@@ -180,4 +174,4 @@ const NestedList: React.FC = () => {
     );
 };
 
-export default NestedList;
+export default SuppliersList;
