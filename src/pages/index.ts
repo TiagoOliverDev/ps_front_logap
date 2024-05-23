@@ -1,3 +1,3 @@
 export * from './home/home';
-export * from './category/category';
+export * from './products/products';
 export * from './suppliers/suppliers';
