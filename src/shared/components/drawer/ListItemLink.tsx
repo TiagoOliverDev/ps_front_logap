@@ -1,9 +1,7 @@
 
 import {
     ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Icon
+    ListItemText
 } from "@mui/material";
 
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
@@ -26,26 +24,26 @@ export const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, on
         <ListItemButton selected={!!math} onClick={handleClick}
             sx={{
                 '&.Mui-selected': {
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)', // bg-blue-500/20
-                    borderColor: '#2563eb', // border-blue-600
-                    color: '#ffffff' // text-white
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', 
+                    borderColor: '#2563eb',
+                    color: '#ffffff' 
                 },
                 '&:hover': {
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)', // bg-blue-500/20
-                    borderColor: '#2563eb', // border-blue-600
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', 
+                    borderColor: '#2563eb',
                 },
-                backgroundColor: 'rgba(107, 114, 128, 0.2)', // bg-gray-500/20
-                borderColor: '#000000', // border-black
-                color: '#ffffff', // text-white
-                // padding: '8px', // p-2
-                // marginY: '8px', // my-2
-                borderRadius: '5px', // rounded-[5px]
-                borderWidth: '2px', // border-2
-                textAlign: 'center', // text-center
-                fontWeight: '600', // font-semibold
-                fontSize: '16px', // text-[16px]
+                backgroundColor: 'rgba(107, 114, 128, 0.2)',
+                borderColor: '#000000',
+                color: '#ffffff', 
+                borderRadius: '5px', 
+                borderWidth: '2px', 
+                textAlign: 'center', 
+                fontWeight: '600', 
+                fontSize: '16px', 
                 marginBottom: '13px',
-                // width: '100%' // full width
+                // padding: '8px', 
+                // marginY: '8px', 
+                // width: '100%' 
             }}
         >
             {/* <ListItemIcon>
