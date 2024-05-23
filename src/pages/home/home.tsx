@@ -43,7 +43,7 @@ export const Home: React.FC = () => {
     
     return(
         <HomeMaster
-            title='teste'
+            title='Painel de controle'
         >
            
             <Container>

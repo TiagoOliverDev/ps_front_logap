@@ -1,5 +1,6 @@
-import { Box, Typography, useTheme, IconButton, useMediaQuery, Theme } from "@mui/material";
+import { Box, Typography, useTheme, IconButton, useMediaQuery, Theme, Icon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { useAppDrawerContext } from "../contexts";
 import { ILayoutBasePagesProps } from "../../@types/ILayoutBasePagesProps"; 
 
@@ -9,21 +10,31 @@ export const HomeMaster: React.FC<ILayoutBasePagesProps> = ({ children, title, t
     const { toggleDrawerOpen } = useAppDrawerContext();
 
     return (
-        <Box height={"100%"} display={"flex"} flexDirection={"column"} gap={1}>
-            {/* <Box display={"flex"} alignItems={"center"} padding={1} gap={1}  >
-
-                <Typography textOverflow={"ellipsis"} whiteSpace={"nowrap"}>
-                    {title}
-                </Typography>
-            </Box> */}
+        <Box height="100vh" display="flex" flexDirection="column">
+            <Box height="10vh" display="flex" alignItems="center" 
+                sx={{ backgroundColor: '#000000', padding: '8px', color: '#f5f5f5', ml: 4  }}>
+                <Box display="flex" alignItems="center">
+                    <IconButton onClick={toggleDrawerOpen} sx={{ color: '#f5f5f5', marginRight: '8px' }}>
+                        <DoubleArrowIcon />
+                    </IconButton>
+                    <Typography variant="h6" textOverflow="ellipsis" whiteSpace="nowrap">
+                        {title}
+                    </Typography>
+                </Box>
+                {/* <Box mt={1} ml="48px">
+                    <Typography variant="subtitle1" sx={{ color: '#66BB6A' }}>
+                        Gerencie todos os cadastros abaixo
+                    </Typography>
+                </Box> */}
+            </Box>
 
             {toobar && (
-                <Box>
+                <Box sx={{ backgroundColor: '#000000', padding: '8px', color: '#f5f5f5' }}>
                     {toobar}
                 </Box>
             )}
 
-            <Box sx={{backgroundColor: '#10141E'}} flex={1} overflow={"auto"}>
+            <Box flex={1} sx={{ backgroundColor: '#10141E', overflow: 'auto', padding: '16px' }}>
                 {children}
             </Box>
         </Box>
