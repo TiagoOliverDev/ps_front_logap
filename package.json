@@ -13,6 +13,7 @@
     "@types/node": "^16.18.97",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
+    "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "framer-motion": "^11.2.6",
     "jspdf": "^2.5.1",
