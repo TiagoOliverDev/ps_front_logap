@@ -18,6 +18,9 @@ import { Edit, Delete, Add } from '@mui/icons-material';
 import { IColumnsSuppliers } from '../../../@types/IColumnsSuppliers'; 
 import { ISupplier } from '../../../@types/ISupplier';
 import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
+import SupplierFormModal from './SupplierFormModal';
+import ConfirmationModal from '../modais/ConfirmationModal';
+import SupplierEditModal from './SupplierEditModal';
 
 const columns: IColumnsSuppliers[] = [
     { id: 'name', label: 'Nome', minWidth: 170 },
@@ -33,6 +36,11 @@ const SuppliersList: React.FC = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
     const [error, setError] = useState<string | null>(null);
+    const [openModal, setOpenModal] = useState(false);
+    const [openAddModal, setOpenAddModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [openConfirmModal, setOpenConfirmModal] = useState(false);
+    const [selectedSupplier, setSelectedSupplier] = useState<ISupplier | null>(null);
 
     useEffect(() => {
         const fetchSuppliers = async () => {
@@ -57,15 +65,37 @@ const SuppliersList: React.FC = () => {
     };
 
     const handleEdit = (id: number) => {
-        console.log('Editar:', id);
+        const supplier = suppliers.find(s => s.id === id);
+        setSelectedSupplier(supplier || null);
+        setOpenEditModal(true);
+    };
+
+    const handleUpdate = (id: number, name: string, email: string, phone: string) => {
+        console.log('Atualizar:', { id, name, email, phone });
+        // Adicione a lógica para atualizar o fornecedor aqui
     };
 
     const handleDelete = (id: number) => {
-        console.log('Excluir:', id);
+        const supplier = suppliers.find(s => s.id === id);
+        setSelectedSupplier(supplier || null);
+        setOpenConfirmModal(true);
     };
 
     const handleAdd = () => {
-        console.log('Cadastrar novo fornecedor');
+        setOpenModal(true);
+    };
+
+    const handleSave = (name: string, email: string, phone: string) => {
+        console.log('Salvar:', { name, email, phone });
+        // Adicione a lógica para salvar o fornecedor aqui
+    };
+
+    const handleConfirmDelete = () => {
+        if (selectedSupplier) {
+            console.log('Excluir:', selectedSupplier.id);
+            // Adicione a lógica para excluir o fornecedor aqui
+            setOpenConfirmModal(false);
+        }
     };
 
     return (
@@ -90,7 +120,7 @@ const SuppliersList: React.FC = () => {
                     <Typography variant="h6" component="div">
                         Lista de Fornecedores
                     </Typography>
-                    <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
+                    <Button variant="outlined" color="primary" startIcon={<Add />} onClick={handleAdd}>
                         Cadastrar
                     </Button>
                 </Box>
@@ -148,6 +178,23 @@ const SuppliersList: React.FC = () => {
                     sx={{ color: '#616161' }}
                 />
             </Paper>
+            <SupplierFormModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onSave={handleSave}
+            />
+            <SupplierEditModal
+                open={openEditModal}
+                onClose={() => setOpenEditModal(false)}
+                onSave={handleUpdate}
+                supplier={selectedSupplier}
+            />
+            <ConfirmationModal
+                message="Deseja excluir o fornecedor ?"
+                open={openConfirmModal}
+                onClose={() => setOpenConfirmModal(false)}
+                onConfirm={handleConfirmDelete}
+            />
         </Container>
     );
 };
