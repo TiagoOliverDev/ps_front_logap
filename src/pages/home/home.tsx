@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, CardActions, TextField, Button, Container, Grid } from '@mui/material';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
-import { Search, Favorite, ShoppingCart, Visibility } from '@mui/icons-material';
-import StarIcon from '@mui/icons-material/Star';
+import { Search, Favorite, ShoppingCart } from '@mui/icons-material';
 import { CategoriesService } from '../../shared/services/api/categories/Categories'; 
-import { IApiResponseCategories, ICategory } from '../../@types/IApiResponseCategories'; 
+import { ICategory } from '../../@types/IApiResponseCategories'; 
 import { IProduct } from '../../@types/IApiResponseProducts';
 import { ProductsService } from '../../shared/services/api/products/Products';
 
-
 export const Home: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('GERAL');
+    const [selectedCategory, setSelectedCategory] = useState<number | 'GERAL'>('GERAL');
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [products, setProducts] = useState<IProduct[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const filteredProducts = products.filter(product => 
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
-        (selectedCategory === 'GERAL' ? true : product.category_id === Number(selectedCategory))
+        (selectedCategory === 'GERAL' ? true : product.category_id === selectedCategory)
     );
 
     useEffect(() => {
@@ -47,8 +45,6 @@ export const Home: React.FC = () => {
     if (error) {
         return <div>Error: {error}</div>;
     }
-
-    console.log('data: ', products)
 
     return (
         <HomeMaster title='Bem vindo a sua HomePage de produtos!'>
@@ -80,8 +76,8 @@ export const Home: React.FC = () => {
                     {categories.map(category => (
                         <Button 
                             key={category.id} 
-                            onClick={() => setSelectedCategory(category.name)}
-                            variant={selectedCategory === category.name ? 'contained' : 'outlined'}
+                            onClick={() => setSelectedCategory(category.id)}
+                            variant={selectedCategory === category.id ? 'contained' : 'outlined'}
                             sx={{ margin: '0 8px' }}
                         >
                             {category.name}
