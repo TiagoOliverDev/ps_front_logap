@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Paper, Typography, Container, Button } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import jsPDF from 'jspdf';
-import { autoTable } from 'jspdf-autotable'; 
+// import { autoTable } from 'jspdf-autotable'; 
 import 'jspdf-autotable';
 import {
     Chart as ChartJS,
@@ -21,11 +21,12 @@ import { IProduct } from '../../@types/IApiResponseProducts';
 import { ProductsService } from '../../shared/services/api/products/ProductsService';
 import { CategoriesService } from '../../shared/services/api/categories/Categories';
 import { SuppliersService } from '../../shared/services/api/suppliers/SuppliersService';
+import { ReportsService } from '../../shared/services/api/reports/ReportsService';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const Dashboard: React.FC = () => {
-    const [selectedReport, setSelectedReport] = useState<string>('');
+    // const [selectedReport, setSelectedReport] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const [products, setProducts] = useState<IProduct[]>([]);
     const [categories, setCategories] = useState<ICategory[]>([]);
@@ -95,66 +96,8 @@ export const Dashboard: React.FC = () => {
     };
 
     const handleGenerateReport = () => {
-        const doc = new jsPDF();
-
-        // Título do relatório
-        doc.setFontSize(18);
-        doc.text('Relatório Geral', 10, 10);
-
-        // Relatório de Categorias e Produtos
-        doc.setFontSize(14);
-        doc.text('Listagem das Categorias e Quantidades de Produtos em Estoque', 10, 20);
-
-        // Tabela de categorias e produtos em estoque
-        const categoryRows = categories.map((category) => {
-            const totalInStock = products.filter(product => product.category_id === category.id && product.quantity > 0)
-                .reduce((acc, product) => acc + product.quantity, 0);
-            return [category.name, totalInStock];
-        });
-        doc.autoTable({
-            head: [['Categoria', 'Quantidade em Estoque']],
-            body: categoryRows,
-            startY: 30,
-            theme: 'grid',
-            styles: { fontSize: 12 }
-        });
-
-        // Relatório de Produtos sem Estoque
-        doc.setFontSize(14);
-        const outOfStockStartY = (doc as any).lastAutoTable.finalY + 10;
-        doc.text('Produtos Esgotados', 10, outOfStockStartY);
-
-        // Tabela de produtos sem estoque
-        const outOfStockRows = products.filter(product => product.quantity === 0)
-            .map(product => [product.name, `R$${product.sale_price.toFixed(2)}`]);
-        doc.autoTable({
-            head: [['Produto', 'Preço']],
-            body: outOfStockRows,
-            startY: outOfStockStartY + 10,
-            theme: 'grid',
-            styles: { fontSize: 12 }
-        });
-
-        // Relatório de Fornecedores com Produtos Esgotados
-        doc.setFontSize(14);
-        const suppliersStartY = (doc as any).lastAutoTable.finalY + 10;
-        doc.text('Fornecedores com Produtos Esgotados', 10, suppliersStartY);
-
-        // Tabela de fornecedores com produtos esgotados
-        const suppliersRows = suppliers.filter(supplier => 
-            products.some(product => product.supplier_id === supplier.id && product.quantity === 0)
-        ).map(supplier => [supplier.name, supplier.email]);
-        doc.autoTable({
-            head: [['Fornecedor', 'Email']],
-            body: suppliersRows,
-            startY: suppliersStartY + 10,
-            theme: 'grid',
-            styles: { fontSize: 12 }
-        });
-
-        doc.save('relatorios_gerais.pdf');
+        ReportsService.generateReport(categories, products, suppliers);
     };
-
 
     return (
         <HomeMaster title="Dashboard">

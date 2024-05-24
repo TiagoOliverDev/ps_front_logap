@@ -1,44 +1,70 @@
-import { API } from "../axiosConfig";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { ICategory } from '../../../../@types/IApiResponseCategories';
+import { ISupplier } from '../../../../@types/ISupplier';
+import { IProduct } from '../../../../@types/IApiResponseProducts';
 
-interface IPoint {
-    id: number | undefined | null | '';
-    id_usuario: number | undefined;
-    id_tipo_ponto: number;
-    nome: string | undefined;
-    tipoPonto: string | undefined;
-    dataHora: string;
-}
-  
-export interface IDetaisPoint{
-    id: number;
-    id_usuario: number | undefined;
-    id_tipo_ponto: number;
-};
+ const generateReport = async(categories: ICategory[], products: IProduct[], suppliers: ISupplier[]) => {
+        const doc = new jsPDF();
 
-type TPointComTotalCount = {
-    data: IPoint[];
-    totalCount: number;
-};
+        // Título do relatório
+        doc.setFontSize(18);
+        doc.text('Relatório Geral', 10, 10);
 
-const getHistoryById = async (userId: any): Promise<TPointComTotalCount | Error> => {
-    try {
-        const urlRelative = `/reports/all_points__history_from_user/${userId}`;
-        const { data } = await API.get(urlRelative);
+        // Relatório de Categorias e Produtos
+        doc.setFontSize(14);
+        doc.text('Listagem das Categorias e Quantidades de Produtos em Estoque', 10, 20);
 
-        if (data && data['points history'] && data['points history'][0]) {
-            const flattenedPoints = data['points history'][0].flat().filter((point: IPoint | null) => point !== null);
-            return {
-                data: flattenedPoints,
-                totalCount: flattenedPoints.length,
-            };
-        }
-        return new Error("Erro ao listar os registros.");
-    } catch (error) {
-        console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao listar os registros.");
+        // Tabela de categorias e produtos em estoque
+        const categoryRows = categories.map((category) => {
+            const totalInStock = products.filter(product => product.category_id === category.id && product.quantity > 0)
+                .reduce((acc, product) => acc + product.quantity, 0);
+            return [category.name, totalInStock];
+        });
+        doc.autoTable({
+            head: [['Categoria', 'Quantidade em Estoque']],
+            body: categoryRows,
+            startY: 30,
+            theme: 'grid',
+            styles: { fontSize: 12 }
+        });
+
+        // Relatório de Produtos sem Estoque
+        doc.setFontSize(14);
+        const outOfStockStartY = (doc as any).lastAutoTable.finalY + 10;
+        doc.text('Produtos Esgotados', 10, outOfStockStartY);
+
+        // Tabela de produtos sem estoque
+        const outOfStockRows = products.filter(product => product.quantity === 0)
+            .map(product => [product.name, `R$${product.sale_price.toFixed(2)}`]);
+        doc.autoTable({
+            head: [['Produto', 'Preço']],
+            body: outOfStockRows,
+            startY: outOfStockStartY + 10,
+            theme: 'grid',
+            styles: { fontSize: 12 }
+        });
+
+        // Relatório de Fornecedores com Produtos Esgotados
+        doc.setFontSize(14);
+        const suppliersStartY = (doc as any).lastAutoTable.finalY + 10;
+        doc.text('Fornecedores com Produtos Esgotados', 10, suppliersStartY);
+
+        // Tabela de fornecedores com produtos esgotados
+        const suppliersRows = suppliers.filter(supplier => 
+            products.some(product => product.supplier_id === supplier.id && product.quantity === 0)
+        ).map(supplier => [supplier.name, supplier.email]);
+        doc.autoTable({
+            head: [['Fornecedor', 'Email']],
+            body: suppliersRows,
+            startY: suppliersStartY + 10,
+            theme: 'grid',
+            styles: { fontSize: 12 }
+        });
+
+        doc.save('relatorios_gerais.pdf');
     }
-};
 
 export const ReportsService = {
-    getHistoryById,
+    generateReport,
 };
