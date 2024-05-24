@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Paper, Typography, Container, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Paper, Typography, Container, Button } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
-import { jsPDF } from 'jspdf';
+import jsPDF from 'jspdf';
+import { autoTable } from 'jspdf-autotable'; 
+import 'jspdf-autotable';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,56 +14,15 @@ import {
     Legend
 } from 'chart.js';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import SubtitleItem from '../../shared/components/subtitle/SubtitleItem';
-// import { ICategory } from '../../@types/IApiResponseCategories';
-// import { ISupplier } from '../../@types/ISupplier';
-// import { IProduct } from '../../@types/IApiResponseProducts';
+import { ICategory } from '../../@types/IApiResponseCategories';
+import { ISupplier } from '../../@types/ISupplier';
+import { IProduct } from '../../@types/IApiResponseProducts';
 import { ProductsService } from '../../shared/services/api/products/ProductsService';
 import { CategoriesService } from '../../shared/services/api/categories/Categories';
 import { SuppliersService } from '../../shared/services/api/suppliers/SuppliersService';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-const suppliers = [
-    { id: 1, name: 'Fornecedor 1', email: 'fornecedor1@example.com', phone: '123456789' },
-    { id: 2, name: 'Fornecedor 2', email: 'fornecedor2@example.com', phone: '987654321' },
-    { id: 3, name: 'Fornecedor 3', email: 'fornecedor3@example.com', phone: '123456789' },
-    { id: 4, name: 'Fornecedor 4', email: 'fornecedor4@example.com', phone: '987654321' },
-    // Adicione mais fornecedores conforme necessário
-];
-
-const products = [
-    { id: 1, name: 'Produto 1', category: 'Celulares', price: 1000, quantity: 10, sales: 150 },
-    { id: 2, name: 'Produto 2', category: 'Notebooks', price: 2000, quantity: 20, sales: 100 },
-    { id: 3, name: 'Produto 3', category: 'Bebidas', price: 50, quantity: 0, sales: 200 },
-    { id: 4, name: 'Produto 4', category: 'Eletrônicos', price: 300, quantity: 30, sales: 50 },
-    { id: 5, name: 'Produto 5', category: 'Roupas', price: 150, quantity: 0, sales: 75 },
-    // Adicione mais produtos conforme necessário
-];
-
-export interface IProduct {
-    name: string;
-    purchase_price: number;
-    quantity: number;
-    sale_price: number;
-    id: number;
-    category_id: number;
-    supplier_id: number;
-}
-
-export interface ICategory {
-    id: number;
-    name: string;
-}
-
-export interface ISupplier {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-}
-
 
 export const Dashboard: React.FC = () => {
     const [selectedReport, setSelectedReport] = useState<string>('');
@@ -134,39 +95,66 @@ export const Dashboard: React.FC = () => {
 
     const handleGenerateReport = () => {
         const doc = new jsPDF();
-    
+
+        // Título do relatório
         doc.setFontSize(18);
         doc.text('Relatório Geral', 10, 10);
-    
-        // Relatório de Categorias e Quantidades de Produtos em Estoque
-        doc.setFontSize(12);
-        doc.text('Categorias e Quantidades de Produtos em Estoque:', 10, 30);
-        categories.forEach((category, index) => {
-            const totalInStock = products.filter(product => product.category_id === category.id)
-                                         .reduce((sum, product) => sum + product.quantity, 0);
-            doc.text(`${category.name}: ${totalInStock} itens em estoque`, 10, 40 + index * 10);
+
+        // Relatório de Categorias e Produtos
+        doc.setFontSize(14);
+        doc.text('Listagem das Categorias e Quantidades de Produtos em Estoque', 10, 20);
+
+        // Tabela de categorias e produtos em estoque
+        const categoryRows = categories.map((category) => {
+            const totalInStock = products.filter(product => product.category_id === category.id && product.quantity > 0)
+                .reduce((acc, product) => acc + product.quantity, 0);
+            return [category.name, totalInStock];
         });
-    
-        // Relatório de Produtos Esgotados
-        doc.text('Produtos Esgotados:', 10, 60);
-        const outOfStockList = products.filter(product => product.quantity === 0);
-        outOfStockList.forEach((product, index) => {
-            doc.text(`${product.name} - ${product.sale_price.toFixed(2)}`, 10, 70 + index * 10);
+        doc.autoTable({
+            head: [['Categoria', 'Quantidade em Estoque']],
+            body: categoryRows,
+            startY: 30,
+            theme: 'grid',
+            styles: { fontSize: 12 }
         });
-    
+
+        // Relatório de Produtos sem Estoque
+        doc.setFontSize(14);
+        const outOfStockStartY = (doc as any).lastAutoTable.finalY + 10;
+        doc.text('Produtos Esgotados', 10, outOfStockStartY);
+
+        // Tabela de produtos sem estoque
+        const outOfStockRows = products.filter(product => product.quantity === 0)
+            .map(product => [product.name, `R$${product.sale_price.toFixed(2)}`]);
+        doc.autoTable({
+            head: [['Produto', 'Preço']],
+            body: outOfStockRows,
+            startY: outOfStockStartY + 10,
+            theme: 'grid',
+            styles: { fontSize: 12 }
+        });
+
         // Relatório de Fornecedores com Produtos Esgotados
-        doc.text('Fornecedores com Produtos Esgotados:', 10, 90);
-        suppliers.forEach((supplier, index) => {
-            const supplierProducts = products.filter(product => product.supplier_id === supplier.id && product.quantity === 0);
-            if (supplierProducts.length > 0) {
-                doc.text(`${supplier.name} (${supplierProducts.length} produtos esgotados)`, 10, 100 + index * 10);
-            }
+        doc.setFontSize(14);
+        const suppliersStartY = (doc as any).lastAutoTable.finalY + 10;
+        doc.text('Fornecedores com Produtos Esgotados', 10, suppliersStartY);
+
+        // Tabela de fornecedores com produtos esgotados
+        const suppliersRows = suppliers.filter(supplier => 
+            products.some(product => product.supplier_id === supplier.id && product.quantity === 0)
+        ).map(supplier => [supplier.name, supplier.email]);
+        doc.autoTable({
+            head: [['Fornecedor', 'Email']],
+            body: suppliersRows,
+            startY: suppliersStartY + 10,
+            theme: 'grid',
+            styles: { fontSize: 12 }
         });
-    
-        doc.save('relatorio.pdf');
+
+        // Salvando o documento
+        doc.save('relatorios_gerais.pdf');
     };
-    
-    
+
 
     return (
         <HomeMaster title="Dashboard">
