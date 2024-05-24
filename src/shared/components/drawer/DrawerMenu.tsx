@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 
 import { useAppDrawerContext } from "../../contexts/DrawerContext";
-// import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { IMenuLateralProps } from "../../../@types/IMenuLateralProps";
 import { ListItemLink } from "./ListItemLink"; 
 
@@ -51,7 +50,7 @@ export const DrawerMenu: React.FC<IMenuLateralProps> = ({ children }) => {
 
                     <Divider />
 
-                    <Box flex={1}>
+                    <Box flex={1} width={'100%'} marginLeft="1.6vh">
                         <List component={"nav"}>
                             {drawerOptions.map(drawerOption => (
                                 <ListItemLink

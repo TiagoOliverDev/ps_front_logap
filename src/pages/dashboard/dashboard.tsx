@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Box, Paper, Typography, Container, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Paper, Typography, Container, Button } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
-import { jsPDF } from 'jspdf';
+import jsPDF from 'jspdf';
+// import { autoTable } from 'jspdf-autotable'; 
+import 'jspdf-autotable';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,41 +14,70 @@ import {
     Legend
 } from 'chart.js';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
+import SubtitleItem from '../../shared/components/subtitle/SubtitleItem';
+import { ICategory } from '../../@types/IApiResponseCategories';
+import { ISupplier } from '../../@types/ISupplier';
+import { IProduct } from '../../@types/IApiResponseProducts';
+import { ProductsService } from '../../shared/services/api/products/ProductsService';
+import { CategoriesService } from '../../shared/services/api/categories/Categories';
+import { SuppliersService } from '../../shared/services/api/suppliers/SuppliersService';
+import { ReportsService } from '../../shared/services/api/reports/ReportsService';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const suppliers = [
-    { id: 1, name: 'Fornecedor 1', email: 'fornecedor1@example.com', phone: '123456789' },
-    { id: 2, name: 'Fornecedor 2', email: 'fornecedor2@example.com', phone: '987654321' },
-    { id: 3, name: 'Fornecedor 3', email: 'fornecedor3@example.com', phone: '123456789' },
-    { id: 4, name: 'Fornecedor 4', email: 'fornecedor4@example.com', phone: '987654321' },
-    // Adicione mais fornecedores conforme necessário
-];
-
-const products = [
-    { id: 1, name: 'Produto 1', category: 'Celulares', price: 1000, quantity: 10, sales: 150 },
-    { id: 2, name: 'Produto 2', category: 'Notebooks', price: 2000, quantity: 20, sales: 100 },
-    { id: 3, name: 'Produto 3', category: 'Bebidas', price: 50, quantity: 0, sales: 200 },
-    { id: 4, name: 'Produto 4', category: 'Eletrônicos', price: 300, quantity: 30, sales: 50 },
-    { id: 5, name: 'Produto 5', category: 'Roupas', price: 150, quantity: 0, sales: 75 },
-    // Adicione mais produtos conforme necessário
-];
-
 export const Dashboard: React.FC = () => {
-    const [selectedReport, setSelectedReport] = useState<string>('');
+    // const [selectedReport, setSelectedReport] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
+    const [products, setProducts] = useState<IProduct[]>([]);
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
 
     const totalProducts = products.length;
     const totalSuppliers = suppliers.length;
     const outOfStockProducts = products.filter(product => product.quantity === 0).length;
 
-    const topSellingProducts = products.sort((a, b) => b.sales - a.sales).slice(0, 5);
+    const topSellingProducts = products.sort((a, b) => b.sale_price - a.sale_price).slice(0, 5);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const result = await ProductsService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setProducts(result);
+            }
+        };
+
+        const fetchCategories = async () => {
+            const result = await CategoriesService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setCategories(result);
+            }
+        };
+
+        const fetchSuppliers = async () => {
+            const result = await SuppliersService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setSuppliers(result);
+            }
+        };
+
+        fetchProducts();
+        fetchCategories();
+        fetchSuppliers();
+    }, []);
 
     const data = {
         labels: topSellingProducts.map(product => product.name),
         datasets: [
             {
-                label: 'Quantidade Vendida',
-                data: topSellingProducts.map(product => product.sales),
+                // label: 'Quantidade Vendida',
+                label: 'Preço',
+                data: topSellingProducts.map(product => product.sale_price),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
@@ -65,16 +96,7 @@ export const Dashboard: React.FC = () => {
     };
 
     const handleGenerateReport = () => {
-        const doc = new jsPDF();
-
-        doc.text('Relatório', 10, 10);
-        if (selectedReport) {
-            doc.text(`Relatório Selecionado: ${selectedReport}`, 10, 20);
-        } else {
-            doc.text('Nenhum relatório selecionado.', 10, 20);
-        }
-
-        doc.save('relatorio.pdf');
+        ReportsService.generateReport(categories, products, suppliers);
     };
 
     return (
@@ -97,7 +119,8 @@ export const Dashboard: React.FC = () => {
 
                 <Paper sx={{ width: '100%', padding: 2, backgroundColor: '#000000', mt: 2 }}>
                     <Typography variant="h6" component="div" sx={{ color: '#F5F5F5', mb: 2 }}>
-                        Produtos Mais Vendidos
+                        {/* Produtos Mais Vendidos */}
+                        Produtos com maiores preços 
                     </Typography>
                     <Box sx={{ height: 400 }}>
                         <Bar data={data} options={options} />
@@ -106,22 +129,13 @@ export const Dashboard: React.FC = () => {
 
                 <Paper sx={{ width: '100%', padding: 2, backgroundColor: '#000000', mt: 2 }}>
                     <Typography variant="h6" component="div" sx={{ color: '#F5F5F5', mb: 2 }}>
-                        Gerar Relatórios PDF
+                        Relatórios
                     </Typography>
-                    <FormControl fullWidth>
-                        <InputLabel id="report-select-label">Selecione o Relatório</InputLabel>
-                        <Select
-                            labelId="report-select-label"
-                            value={selectedReport}
-                            onChange={(e) => setSelectedReport(e.target.value as string)}
-                        >
-                            <MenuItem value="Relatório 1">Relatório 1</MenuItem>
-                            <MenuItem value="Relatório 2">Relatório 2</MenuItem>
-                            <MenuItem value="Relatório 3">Relatório 3</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <SubtitleItem text="Listagem das categorias juntamente com suas quantidades totais de produtos em estoque" />
+                    <SubtitleItem text="Listagem dos produtos que estão faltando em estoque" />
+                    <SubtitleItem text="Listagem dos fornecedores que possuem produtos faltando em estoque" />
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="primary" onClick={handleGenerateReport}>
+                        <Button variant="outlined" color="primary" onClick={handleGenerateReport}>
                             Gerar Relatório
                         </Button>
                     </Box>

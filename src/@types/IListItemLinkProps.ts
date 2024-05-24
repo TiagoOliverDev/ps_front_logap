@@ -1,6 +1,6 @@
 export interface IListItemLinkProps {
     to: string;
-    icon: React.ReactNode;
+    icon?: React.ReactNode;
     label: string;
     onClick: (() => void) | undefined;
 }
