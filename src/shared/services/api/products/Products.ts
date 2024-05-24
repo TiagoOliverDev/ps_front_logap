@@ -1,6 +1,6 @@
 import { Enviroment } from "../../../environment";
 import { API } from "../axiosConfig";
-import { IApiResponseProducts, IProduct } from '../../../../@types/IApiResponseProducts'; 
+import { IApiResponseProducts, IProduct, INewProduct } from '../../../../@types/IApiResponseProducts'; 
 
 
 export interface IDetaisCollaborator {
@@ -47,20 +47,13 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
     };
 };
 
-const create = async (dados: Omit<IDetaisCollaborator, "id">): Promise<number | Error> => {
+export const create = async (product: INewProduct): Promise<IProduct | Error> => {
     try {
-
-        const { data } = await API.post<IDetaisCollaborator>("/collaborator/register_collaborator", dados);
-
-        if (data) {
-            return data.id;
-        };
-
-        return new Error("Erro ao criar o registro.");
-    } catch (error) {
-        console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao consultar o registro.");
-    };
+        const { data } = await API.post<IProduct>('/products/cadastrar', product);
+        return data;
+    } catch (error: any) {
+        return new Error(error.response?.data.message || "Erro ao cadastrar o produto.");
+    }
 };
 
 const updateById = async (id: number, dados: IDetaisCollaborator): Promise<void | Error> => {

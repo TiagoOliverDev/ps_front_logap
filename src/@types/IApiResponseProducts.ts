@@ -8,6 +8,16 @@ export interface IProduct {
     supplier_id: number;
 }
 
+export interface INewProduct {
+    name: string;
+    purchase_price: number;
+    quantity: number;
+    sale_price: number;
+    category_id: number;
+    supplier_id: number;
+}
+
+
 export interface IApiResponseProducts {
     data: IProduct[];
 }

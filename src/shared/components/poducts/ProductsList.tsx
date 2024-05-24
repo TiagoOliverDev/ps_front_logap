@@ -16,8 +16,10 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
 import { IColumns } from '../../../@types/IColumns';
-import { IProduct } from '../../../@types/IApiResponseProducts';
+import { INewProduct, IProduct } from '../../../@types/IApiResponseProducts';
 import { ProductsService } from '../../services/api/products/Products';
+import ProductsFormModal from './ProductsFormModal';
+
 
 const columns: IColumns[] = [
     { id: 'name', label: 'Nome', minWidth: 170 },
@@ -34,6 +36,7 @@ const ProductsList: React.FC = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(7);
     const [error, setError] = useState<string | null>(null);
+    const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -66,7 +69,17 @@ const ProductsList: React.FC = () => {
     };
 
     const handleAdd = () => {
-        console.log('Cadastrar novo produto');
+        setOpenModal(true);
+    };
+
+    const handleSave = async (newProduct: INewProduct) => {
+        const result = await ProductsService.create(newProduct);
+        if (result instanceof Error) {
+            console.error(result.message); 
+        } else {
+            setProducts(prevProducts => [...prevProducts, result]);
+            setOpenModal(false); 
+        }
     };
 
     const totalProducts = products.length;
@@ -94,7 +107,7 @@ const ProductsList: React.FC = () => {
                     <Typography variant="h6" component="div">
                         Lista de Produtos
                     </Typography>
-                    <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
+                    <Button variant="outlined" color="primary" startIcon={<Add />} onClick={handleAdd}>
                         Cadastrar
                     </Button>
                 </Box>
@@ -156,6 +169,11 @@ const ProductsList: React.FC = () => {
                     sx={{ color: '#616161' }}
                 />
             </Paper>
+            <ProductsFormModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onSave={handleSave}
+            />
         </Container>
     );
 };
