@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Paper, Typography, Container, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { jsPDF } from 'jspdf';
@@ -12,6 +12,14 @@ import {
     Legend
 } from 'chart.js';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import SubtitleItem from '../../shared/components/subtitle/SubtitleItem';
+// import { ICategory } from '../../@types/IApiResponseCategories';
+// import { ISupplier } from '../../@types/ISupplier';
+// import { IProduct } from '../../@types/IApiResponseProducts';
+import { ProductsService } from '../../shared/services/api/products/ProductsService';
+import { CategoriesService } from '../../shared/services/api/categories/Categories';
+import { SuppliersService } from '../../shared/services/api/suppliers/SuppliersService';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -32,21 +40,81 @@ const products = [
     // Adicione mais produtos conforme necessário
 ];
 
+export interface IProduct {
+    name: string;
+    purchase_price: number;
+    quantity: number;
+    sale_price: number;
+    id: number;
+    category_id: number;
+    supplier_id: number;
+}
+
+export interface ICategory {
+    id: number;
+    name: string;
+}
+
+export interface ISupplier {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+}
+
+
 export const Dashboard: React.FC = () => {
     const [selectedReport, setSelectedReport] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
+    const [products, setProducts] = useState<IProduct[]>([]);
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
 
     const totalProducts = products.length;
     const totalSuppliers = suppliers.length;
     const outOfStockProducts = products.filter(product => product.quantity === 0).length;
 
-    const topSellingProducts = products.sort((a, b) => b.sales - a.sales).slice(0, 5);
+    const topSellingProducts = products.sort((a, b) => b.sale_price - a.sale_price).slice(0, 5);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const result = await ProductsService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setProducts(result);
+            }
+        };
+
+        const fetchCategories = async () => {
+            const result = await CategoriesService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setCategories(result);
+            }
+        };
+
+        const fetchSuppliers = async () => {
+            const result = await SuppliersService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setSuppliers(result);
+            }
+        };
+
+        fetchProducts();
+        fetchCategories();
+        fetchSuppliers();
+    }, []);
 
     const data = {
         labels: topSellingProducts.map(product => product.name),
         datasets: [
             {
                 label: 'Quantidade Vendida',
-                data: topSellingProducts.map(product => product.sales),
+                data: topSellingProducts.map(product => product.sale_price),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
@@ -66,16 +134,39 @@ export const Dashboard: React.FC = () => {
 
     const handleGenerateReport = () => {
         const doc = new jsPDF();
-
-        doc.text('Relatório', 10, 10);
-        if (selectedReport) {
-            doc.text(`Relatório Selecionado: ${selectedReport}`, 10, 20);
-        } else {
-            doc.text('Nenhum relatório selecionado.', 10, 20);
-        }
-
+    
+        doc.setFontSize(18);
+        doc.text('Relatório Geral', 10, 10);
+    
+        // Relatório de Categorias e Quantidades de Produtos em Estoque
+        doc.setFontSize(12);
+        doc.text('Categorias e Quantidades de Produtos em Estoque:', 10, 30);
+        categories.forEach((category, index) => {
+            const totalInStock = products.filter(product => product.category_id === category.id)
+                                         .reduce((sum, product) => sum + product.quantity, 0);
+            doc.text(`${category.name}: ${totalInStock} itens em estoque`, 10, 40 + index * 10);
+        });
+    
+        // Relatório de Produtos Esgotados
+        doc.text('Produtos Esgotados:', 10, 60);
+        const outOfStockList = products.filter(product => product.quantity === 0);
+        outOfStockList.forEach((product, index) => {
+            doc.text(`${product.name} - ${product.sale_price.toFixed(2)}`, 10, 70 + index * 10);
+        });
+    
+        // Relatório de Fornecedores com Produtos Esgotados
+        doc.text('Fornecedores com Produtos Esgotados:', 10, 90);
+        suppliers.forEach((supplier, index) => {
+            const supplierProducts = products.filter(product => product.supplier_id === supplier.id && product.quantity === 0);
+            if (supplierProducts.length > 0) {
+                doc.text(`${supplier.name} (${supplierProducts.length} produtos esgotados)`, 10, 100 + index * 10);
+            }
+        });
+    
         doc.save('relatorio.pdf');
     };
+    
+    
 
     return (
         <HomeMaster title="Dashboard">
@@ -106,22 +197,13 @@ export const Dashboard: React.FC = () => {
 
                 <Paper sx={{ width: '100%', padding: 2, backgroundColor: '#000000', mt: 2 }}>
                     <Typography variant="h6" component="div" sx={{ color: '#F5F5F5', mb: 2 }}>
-                        Gerar Relatórios PDF
+                        Relatórios
                     </Typography>
-                    <FormControl fullWidth>
-                        <InputLabel id="report-select-label">Selecione o Relatório</InputLabel>
-                        <Select
-                            labelId="report-select-label"
-                            value={selectedReport}
-                            onChange={(e) => setSelectedReport(e.target.value as string)}
-                        >
-                            <MenuItem value="Relatório 1">Relatório 1</MenuItem>
-                            <MenuItem value="Relatório 2">Relatório 2</MenuItem>
-                            <MenuItem value="Relatório 3">Relatório 3</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <SubtitleItem text="Listagem das categorias juntamente com suas quantidades totais de produtos em estoque" />
+                    <SubtitleItem text="Listagem dos produtos que estão faltando em estoque" />
+                    <SubtitleItem text="Listagem dos fornecedores que possuem produtos faltando em estoque" />
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="primary" onClick={handleGenerateReport}>
+                        <Button variant="outlined" color="primary" onClick={handleGenerateReport}>
                             Gerar Relatório
                         </Button>
                     </Box>
