@@ -48,6 +48,7 @@ const ProductEditModal: React.FC<IEditProductModalProps> = ({ open, onClose, onS
         onSave(formData);
         onClose();
     };
+    
     return (
         <Dialog open={open} onClose={onClose} PaperProps={{ sx: { backgroundColor: '#10141E', color: '#FFFFFF' } }}>
             <DialogTitle>Editar Produto</DialogTitle>

@@ -1,19 +1,5 @@
-import { Suppliers } from './../../../../pages/suppliers/suppliers';
-import { Enviroment } from "../../../environment";
 import { API } from "../axiosConfig";
-import { IApiResponseProducts, IProduct } from '../../../../@types/IApiResponseProducts'; 
 import { ISupplier, INewSupplier } from '../../../../@types/ISupplier'; 
-
-
-export interface IDetaisCollaborator {
-    id: number;
-    nome: string;
-    matricula: string;
-    email: string;
-    senha: string;
-    setor: string;
-    turno: string;
-};
 
 
 const getAll = async (): Promise<ISupplier[] | Error> => {

@@ -6,15 +6,10 @@ import {
     DialogTitle,
     Button
 } from '@mui/material';
+import { IConfirmationModalProps } from '../../../@types/IConfirmationModalProps';
 
-interface ConfirmationModalProps {
-    message: string;
-    open: boolean;
-    onClose: () => void;
-    onConfirm: () => void;
-}
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ message, open, onClose, onConfirm }) => {
+const ConfirmationModal: React.FC<IConfirmationModalProps> = ({ message, open, onClose, onConfirm }) => {
     return (
         <Dialog open={open} onClose={onClose} PaperProps={{ sx: { backgroundColor: '#10141E', color: '#FFFFFF' } }}>
             <DialogTitle sx={{ backgroundColor: '#10141E', color: '#FFFFFF' }}>Confirmar Exclusão</DialogTitle>

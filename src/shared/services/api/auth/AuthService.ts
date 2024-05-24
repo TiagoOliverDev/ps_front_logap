@@ -17,7 +17,6 @@ const auth = async (email: string, password: string): Promise<IAuthProps | Error
     }
 }
 
-
 export const AuthService = {
     auth,
 };

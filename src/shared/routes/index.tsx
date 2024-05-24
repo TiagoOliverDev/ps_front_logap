@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Home, Products, Suppliers, Dashboard } from '../../pages';
 import { useEffect } from 'react';
 import HomeIcon from '@mui/icons-material/Home';

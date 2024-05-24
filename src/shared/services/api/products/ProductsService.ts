@@ -1,17 +1,5 @@
-import { Enviroment } from "../../../environment";
 import { API } from "../axiosConfig";
-import { IApiResponseProducts, IProduct, INewProduct, IProductUpdate } from '../../../../@types/IApiResponseProducts'; 
-
-
-export interface IDetaisCollaborator {
-    id: number;
-    nome: string;
-    matricula: string;
-    email: string;
-    senha: string;
-    setor: string;
-    turno: string;
-};
+import { IProduct, INewProduct, IProductUpdate } from '../../../../@types/IApiResponseProducts'; 
 
 
 const getAll = async (): Promise<IProduct[] | Error> => {

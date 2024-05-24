@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 
 import { useAppDrawerContext } from "../../contexts/DrawerContext";
-// import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { IMenuLateralProps } from "../../../@types/IMenuLateralProps";
 import { ListItemLink } from "./ListItemLink"; 
 

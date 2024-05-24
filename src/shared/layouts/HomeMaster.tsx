@@ -33,5 +33,4 @@ export const HomeMaster: React.FC<ILayoutBasePagesProps> = ({ children, title, t
             </Box>
         </Box>
     );
-    ;
 }

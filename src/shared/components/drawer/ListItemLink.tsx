@@ -1,4 +1,3 @@
-
 import {
     ListItemButton,
     ListItemText
@@ -41,14 +40,8 @@ export const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, on
                 fontWeight: '600', 
                 fontSize: '16px', 
                 marginBottom: '13px',
-                // padding: '8px', 
-                // marginY: '8px', 
-                // width: '100%' 
             }}
         >
-            {/* <ListItemIcon>
-                <Icon>{icon}</Icon>
-            </ListItemIcon> */}
             <ListItemText primary={label} />
         </ListItemButton>
     );
