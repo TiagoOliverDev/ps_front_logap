@@ -50,7 +50,7 @@ export const DrawerMenu: React.FC<IMenuLateralProps> = ({ children }) => {
 
                     <Divider />
 
-                    <Box flex={1}>
+                    <Box flex={1} width={'100%'} marginLeft="1.6vh">
                         <List component={"nav"}>
                             {drawerOptions.map(drawerOption => (
                                 <ListItemLink
