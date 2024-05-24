@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
     TextField,
-    Button
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel
 } from '@mui/material';
 import { INewProduct } from '../../../@types/IApiResponseProducts'; 
+import { ICategory } from '../../../@types/IApiResponseCategories';
+import { CategoriesService } from '../../services/api/categories/Categories';
+import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
+import { ISupplier } from '../../../@types/ISupplier';
+import { IProductFormModalProps } from '../../../@types/IProductFormModalProps'; 
 
-export interface IProductData {
-    name: string;
-    purchase_price: number;
-    quantity: number;
-    sale_price: number;
-    category_id: number;
-    supplier_id: number;
-}
-
-export interface IProductFormModalProps {
-    open: boolean;
-    onClose: () => void;
-    onSave: (product: IProductData) => void;
-}
 
 const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, onSave }) => {
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
     const [product, setProduct] = useState<INewProduct>({
         name: '',
         purchase_price: 0,
@@ -34,15 +32,42 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
         supplier_id: 0
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() =>{
+        const fetchCategories = async () => {
+            const result = await CategoriesService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setCategories(result);
+            }
+        };
+
+        const fetchSuppliers = async () => {
+            const result = await SuppliersService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setSuppliers(result);
+            }
+        };
+
+        fetchCategories();
+        fetchSuppliers();
+    }, [])
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name: string; value: any; } }) => {
         const { name, value } = e.target;
-        setProduct(prev => ({ ...prev, [name]: name === 'purchase_price' || name === 'quantity' || name === 'sale_price' || name === 'category_id' || name === 'supplier_id' ? Number(value) : value }));
+        setProduct(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSave = () => {
         onSave(product);
         onClose();
     };
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <Dialog open={open} onClose={onClose} PaperProps={{ sx: { backgroundColor: '#10141E', color: '#FFFFFF' } }}>
@@ -89,26 +114,36 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                     onChange={handleChange}
                     sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
                 />
-                <TextField
-                    margin="dense"
-                    name="category_id"
-                    label="Categoria ID"
-                    type="number"
-                    fullWidth
-                    value={product.category_id}
-                    onChange={handleChange}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
-                />
-                <TextField
-                    margin="dense"
-                    name="supplier_id"
-                    label="Fornecedor ID"
-                    type="number"
-                    fullWidth
-                    value={product.supplier_id}
-                    onChange={handleChange}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
-                />
+                <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
+                    <InputLabel sx={{ color: '#FFFFFF' }}>Categoria</InputLabel>
+                    <Select
+                        name="category_id"
+                        value={product.category_id}
+                        onChange={handleChange}
+                        sx={{ color: '#FFFFFF' }}
+                    >
+                        {categories.map(category => (
+                            <MenuItem key={category.id} value={category.id}>
+                                {category.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
+                    <InputLabel sx={{ color: '#FFFFFF' }}>Fornecedor</InputLabel>
+                    <Select
+                        name="supplier_id"
+                        value={product.supplier_id}
+                        onChange={handleChange}
+                        sx={{ color: '#FFFFFF' }}
+                    >
+                        {suppliers.map(supplier => (
+                            <MenuItem key={supplier.id} value={supplier.id}>
+                                {supplier.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </DialogContent>
             <DialogActions>
                 <Button variant='outlined' onClick={onClose} color="error">

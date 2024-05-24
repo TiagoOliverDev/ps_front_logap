@@ -29,6 +29,15 @@ const getAll = async (): Promise<IProduct[] | Error> => {
     }
 };
 
+export const create = async (product: INewProduct): Promise<IProduct | Error> => {
+    try {
+        const { data } = await API.post<IProduct>('/products/cadastrar', product);
+        return data;
+    } catch (error: any) {
+        return new Error(error.response?.data.message || "Erro ao cadastrar o produto.");
+    }
+};
+
 const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
     try {
         const urlRelative = `/collaborator/collaborator/${id}`;
@@ -45,15 +54,6 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
         console.error(error);
         return new Error((error as { message: string }).message || "Erro ao consultar o registro.");
     };
-};
-
-export const create = async (product: INewProduct): Promise<IProduct | Error> => {
-    try {
-        const { data } = await API.post<IProduct>('/products/cadastrar', product);
-        return data;
-    } catch (error: any) {
-        return new Error(error.response?.data.message || "Erro ao cadastrar o produto.");
-    }
 };
 
 const updateById = async (id: number, dados: IDetaisCollaborator): Promise<void | Error> => {
