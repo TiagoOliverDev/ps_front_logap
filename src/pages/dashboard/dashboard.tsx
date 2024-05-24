@@ -74,7 +74,8 @@ export const Dashboard: React.FC = () => {
         labels: topSellingProducts.map(product => product.name),
         datasets: [
             {
-                label: 'Quantidade Vendida',
+                // label: 'Quantidade Vendida',
+                label: 'Preço',
                 data: topSellingProducts.map(product => product.sale_price),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -151,7 +152,6 @@ export const Dashboard: React.FC = () => {
             styles: { fontSize: 12 }
         });
 
-        // Salvando o documento
         doc.save('relatorios_gerais.pdf');
     };
 
@@ -176,7 +176,8 @@ export const Dashboard: React.FC = () => {
 
                 <Paper sx={{ width: '100%', padding: 2, backgroundColor: '#000000', mt: 2 }}>
                     <Typography variant="h6" component="div" sx={{ color: '#F5F5F5', mb: 2 }}>
-                        Produtos Mais Vendidos
+                        {/* Produtos Mais Vendidos */}
+                        Produtos com maiores preços 
                     </Typography>
                     <Box sx={{ height: 400 }}>
                         <Bar data={data} options={options} />
