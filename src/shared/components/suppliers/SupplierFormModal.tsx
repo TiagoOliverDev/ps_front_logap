@@ -36,7 +36,7 @@ const SupplierFormModal: React.FC<SupplierFormModalProps> = ({ open, onClose, on
                     fullWidth
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    style={{backgroundColor: 'gray', borderRadius: '12px'}}
+                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px'}}
                 />
                 <TextField
                     margin="dense"
@@ -45,7 +45,7 @@ const SupplierFormModal: React.FC<SupplierFormModalProps> = ({ open, onClose, on
                     fullWidth
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    style={{backgroundColor: 'gray', borderRadius: '12px'}}
+                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
                 />
                 <TextField
                     margin="dense"
@@ -54,7 +54,7 @@ const SupplierFormModal: React.FC<SupplierFormModalProps> = ({ open, onClose, on
                     fullWidth
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    style={{backgroundColor: 'gray', borderRadius: '12px'}}
+                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
                 />
             </DialogContent>
             <DialogActions>

@@ -41,7 +41,7 @@ const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, o
                     fullWidth
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' } }}
+                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px' }}
                 />
                 <TextField
                     margin="dense"
@@ -50,7 +50,7 @@ const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, o
                     fullWidth
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' } }}
+                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
                 />
                 <TextField
                     margin="dense"
@@ -59,7 +59,7 @@ const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, o
                     fullWidth
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' } }}
+                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px'  }}
                 />
             </DialogContent>
             <DialogActions sx={{ backgroundColor: '#10141E' }}>

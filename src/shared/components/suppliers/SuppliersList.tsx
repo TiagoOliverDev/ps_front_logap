@@ -89,6 +89,20 @@ const SuppliersList: React.FC = () => {
         setSelectedSupplier(supplier || null);
         setOpenConfirmModal(true);
     };
+    
+    const handleConfirmDelete = async () => {
+        if (selectedSupplier) {
+            const result = await SuppliersService.deleteById(selectedSupplier.id);
+            if (result instanceof Error) {
+                setError(result.message);
+                console.log('Erro ao excluir:', result.message);
+            } else {
+                console.log('Fornecedor excluído com sucesso!');
+                setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== selectedSupplier.id));
+            }
+            setOpenConfirmModal(false);
+        }
+    };
 
     const handleAdd = () => {
         setOpenModal(true);
@@ -104,14 +118,6 @@ const SuppliersList: React.FC = () => {
             setSuppliers((prevSuppliers) => [...prevSuppliers, newSupplierWithId]);
         }
         setOpenAddModal(false);
-    };
-
-    const handleConfirmDelete = () => {
-        if (selectedSupplier) {
-            console.log('Excluir:', selectedSupplier.id);
-            // Adicione a lógica para excluir o fornecedor aqui
-            setOpenConfirmModal(false);
-        }
     };
 
     return (

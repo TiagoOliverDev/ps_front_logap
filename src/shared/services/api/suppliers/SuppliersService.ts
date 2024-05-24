@@ -59,14 +59,23 @@ const update = async (id: number, dados: Omit<ISupplier, "id">): Promise<void | 
     }
 }
 
-const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
+const deleteById = async (id: number): Promise<void | Error> => {
     try {
-        const urlRelative = `/collaborator/collaborator/${id}`;
+        await API.delete(`/suppliers/delete/${id}`);
+    } catch (error) {
+        console.error(error);
+        return new Error((error as { message: string }).message || "Erro ao deletar o registro.");
+    };
+};
+
+const getById = async (id: number): Promise<ISupplier | Error> => {
+    try {
+        const urlRelative = `/suppliers/${id}`;
 
         const { data } = await API.get(urlRelative);
 
-        if (data && data.collaborator) {
-            return data.collaborator[0];
+        if (data) {
+            return data;
         };
 
         return new Error("Erro ao  consultar o registro.");
@@ -77,14 +86,6 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
     };
 };
 
-const deleteById = async (id: number): Promise<void | Error> => {
-    try {
-        await API.delete(`/collaborator/collaborator/${id}`);
-    } catch (error) {
-        console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao deletar o registro.");
-    };
-};
 
 export const SuppliersService = {
     getAll,
