@@ -23,6 +23,7 @@ import ProductEditModal from './ProductEditModal';
 import { ICategory } from '../../../@types/IApiResponseCategories';
 import { ISupplier } from '../../../@types/ISupplier';
 import { CategoriesService } from '../../services/api/categories/Categories';
+import ConfirmationModal from '../modais/ConfirmationModal';
 import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
 
 
@@ -46,6 +47,7 @@ const ProductsList: React.FC = () => {
     const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+    const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
 
     useEffect(() => {
@@ -91,7 +93,9 @@ const ProductsList: React.FC = () => {
     };
 
     const handleDelete = (id: number) => {
-        console.log('Excluir:', id);
+        const product = products.find(p => p.id === id);
+        setSelectedProduct(product || null);
+        setOpenConfirmModal(true);
     };
 
     const handleAdd = () => {
@@ -121,6 +125,20 @@ const ProductsList: React.FC = () => {
         } else {
             setProducts(prev => prev.map(p => p.id === productData.id ? { ...productData } : p));
             setOpenEditModal(false);
+        }
+    };
+
+    const handleConfirmDelete = async () => {
+        if (selectedProduct) {
+            const result = await ProductsService.deleteById(selectedProduct.id);
+            if (result instanceof Error) {
+                setError(result.message);
+                console.log('Erro ao excluir:', result.message);
+            } else {
+                console.log('Produto excluído com sucesso!');
+                setProducts(prevProducts => prevProducts.filter(s => s.id !== selectedProduct.id))
+            }
+            setOpenConfirmModal(false);
         }
     };
 
@@ -223,6 +241,12 @@ const ProductsList: React.FC = () => {
                 product={selectedProduct}
                 categories={categories}
                 suppliers={suppliers}
+            />
+            <ConfirmationModal
+                message="Deseja excluir o produto ?"
+                open={openConfirmModal}
+                onClose={() => setOpenConfirmModal(false)}
+                onConfirm={handleConfirmDelete}
             />
         </Container>
     );

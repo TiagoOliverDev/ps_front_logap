@@ -48,6 +48,15 @@ const updateById = async (id: number, productData: IProductUpdate): Promise<void
     }
 };
 
+const deleteById = async (id: number): Promise<void | Error> => {
+    try {
+        await API.delete(`/products/delete/${id}`);
+    } catch (error) {
+        console.error(error);
+        return new Error((error as { message: string }).message || "Erro ao deletar o registro.");
+    };
+};
+
 const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
     try {
         const urlRelative = `/collaborator/collaborator/${id}`;
@@ -68,14 +77,7 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
 
 
 
-const deleteById = async (id: number): Promise<void | Error> => {
-    try {
-        await API.delete(`/collaborator/collaborator/${id}`);
-    } catch (error) {
-        console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao deletar o registro.");
-    };
-};
+
 
 export const ProductsService = {
     getAll,
