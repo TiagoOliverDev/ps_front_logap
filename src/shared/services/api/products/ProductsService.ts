@@ -57,14 +57,14 @@ const deleteById = async (id: number): Promise<void | Error> => {
     };
 };
 
-const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
+const getById = async (id: number): Promise<IProduct | Error> => {
     try {
-        const urlRelative = `/collaborator/collaborator/${id}`;
+        const urlRelative = `/products/${id}`;
 
         const { data } = await API.get(urlRelative);
 
-        if (data && data.collaborator) {
-            return data.collaborator[0];
+        if (data) {
+            return data;
         };
 
         return new Error("Erro ao  consultar o registro.");
@@ -74,10 +74,6 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
         return new Error((error as { message: string }).message || "Erro ao consultar o registro.");
     };
 };
-
-
-
-
 
 export const ProductsService = {
     getAll,

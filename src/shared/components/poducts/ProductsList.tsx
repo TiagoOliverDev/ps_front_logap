@@ -17,7 +17,7 @@ import {
 import { Edit, Delete, Add } from '@mui/icons-material';
 import { IColumns } from '../../../@types/IColumns';
 import { INewProduct, IProduct } from '../../../@types/IApiResponseProducts';
-import { ProductsService } from '../../services/api/products/Products';
+import { ProductsService } from '../../services/api/products/ProductsService';
 import ProductsFormModal from './ProductsFormModal';
 import ProductEditModal from './ProductEditModal';
 import { ICategory } from '../../../@types/IApiResponseCategories';

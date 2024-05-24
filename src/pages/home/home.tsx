@@ -5,7 +5,7 @@ import { Search, Favorite, ShoppingCart } from '@mui/icons-material';
 import { CategoriesService } from '../../shared/services/api/categories/Categories'; 
 import { ICategory } from '../../@types/IApiResponseCategories'; 
 import { IProduct } from '../../@types/IApiResponseProducts';
-import { ProductsService } from '../../shared/services/api/products/Products';
+import { ProductsService } from '../../shared/services/api/products/ProductsService';
 
 export const Home: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
