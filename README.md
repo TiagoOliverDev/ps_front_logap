@@ -1,6 +1,6 @@
-<h1 align="center">Front end Points manager</h1>
+<h1 align="center">Front end Logap teste</h1>
 
-Front end for points system
+Front end 
 
 <hr/>
 
@@ -86,7 +86,7 @@ Open folder project and open a terminal and run the following command:
   ```
   npm start
   ```
-## Step 4: Vá no repositório backend e siga as instruções
+## Step 4: go to the backend repository and follow the instructions for download
 
   ```
   https://github.com/TiagoOliverDev/ps_backend_logap
