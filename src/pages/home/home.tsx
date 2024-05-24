@@ -89,7 +89,7 @@ export const Home: React.FC = () => {
                     {filteredProducts.map(product => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
                             <Card style={{borderRadius: '11px', backgroundColor: '#000000'}} >
-                                <img src='https://via.placeholder.com/150' alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                                <img src='imgPadrao.png' alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                                 <CardContent>
                                     <Typography style={{color: '#616161'}} variant="h6">{product.name}</Typography>
                                     <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">R$ {product.sale_price}</Typography>
