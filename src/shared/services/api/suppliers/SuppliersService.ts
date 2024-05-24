@@ -1,16 +1,9 @@
 import { Suppliers } from './../../../../pages/suppliers/suppliers';
 import { Enviroment } from "../../../environment";
 import { API } from "../axiosConfig";
+import { IApiResponseProducts, IProduct } from '../../../../@types/IApiResponseProducts'; 
+import { ISupplier } from '../../../../@types/ISupplier'; 
 
-export interface IListagemCollaborator {
-    id: number;
-    nome: string;
-    matricula: string;
-    email: string;
-    senha: string;
-    setor: string;
-    turno: string;
-};
 
 export interface IDetaisCollaborator {
     id: number;
@@ -22,28 +15,20 @@ export interface IDetaisCollaborator {
     turno: string;
 };
 
-type TCollaboratorComTotalCount = {
-    data: IListagemCollaborator[];
-    totalCount: number;
-};
 
-const getAll = async (page = 1, filter = ""): Promise<TCollaboratorComTotalCount | Error> => {
+const getAll = async (): Promise<ISupplier[] | Error> => {
     try {
-        const urlRelative = `/collaborator/list_all_collaborators?_page=${page}&_limit=${Enviroment}&nomeCompleto_like=${filter}`;
+        const urlRelative = `/suppliers/fornecedores/listagem`;
+        const { data } = await API.get<ISupplier[]>(urlRelative);
 
-        const { data } = await API.get(urlRelative);
-
-        if (data && data.collaborators) {
-            return {
-                data: data.collaborators[0], 
-                totalCount: data.collaborators[0].length, 
-            };
-        };
-        return new Error("Erro ao listar os registros.");
+        if (data) {
+            return data;
+        }
+        return new Error("Erro ao listar os registros de fornecedores");
     } catch (error) {
         console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao listar os registros.");
-    };
+        return new Error((error as { message: string }).message || "Erro ao listar os registros de fornecedores");
+    }
 };
 
 const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
