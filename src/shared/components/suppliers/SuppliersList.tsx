@@ -70,9 +70,18 @@ const SuppliersList: React.FC = () => {
         setOpenEditModal(true);
     };
 
-    const handleUpdate = (id: number, name: string, email: string, phone: string) => {
-        console.log('Atualizar:', { id, name, email, phone });
-        // Adicione a lógica para atualizar o fornecedor aqui
+    const handleUpdate = async (id: number, name: string, email: string, phone: string) => {
+        const updatedSupplier: Omit<ISupplier, 'id'> = { name, email, phone };
+        const result = await SuppliersService.update(id, updatedSupplier);
+        if (result instanceof Error) {
+            setError(result.message);
+            console.log('erro: ', result.message)
+        } else {
+            setSuppliers((prevSuppliers) => prevSuppliers.map(supplier => 
+                supplier.id === id ? { ...supplier, name, email, phone } : supplier
+            ));
+        }
+        setOpenEditModal(false);
     };
 
     const handleDelete = (id: number) => {

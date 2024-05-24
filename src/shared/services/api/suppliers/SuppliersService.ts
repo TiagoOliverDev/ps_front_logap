@@ -38,11 +38,24 @@ const create = async (dados: INewSupplier): Promise<number | Error> => {
         if (data) {
             return data.id;
         }
-        
+
         return new Error("Erro ao cadastrar o fornecedor");
     } catch (error) {
         console.error(error);
         return new Error((error as { message: string }).message || "Erro ao cadastrar o fornecedor");
+    }
+}
+
+const update = async (id: number, dados: Omit<ISupplier, "id">): Promise<void | Error> => {
+    try {
+        const { data } = await API.put(`/suppliers/editar/${id}`, dados);
+
+        if (!data) {
+            return new Error("Erro ao atualizar o registro.");
+        }
+    } catch (error) {
+        console.error(error);
+        return new Error((error as { message: string }).message || "Erro ao atualizar o registro.");
     }
 }
 
@@ -64,15 +77,6 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
     };
 };
 
-const updateById = async (id: number, dados: IDetaisCollaborator): Promise<void | Error> => {
-    try {
-        await API.put(`/collaborator/collaborator/${id}`, dados);
-    } catch (error) {
-        console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao atualizar o registro.");
-    };
-};
-
 const deleteById = async (id: number): Promise<void | Error> => {
     try {
         await API.delete(`/collaborator/collaborator/${id}`);
@@ -86,6 +90,6 @@ export const SuppliersService = {
     getAll,
     getById,
     create,
-    updateById,
+    update,
     deleteById,
 };

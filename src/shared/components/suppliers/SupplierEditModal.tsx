@@ -1,4 +1,3 @@
-// src/shared/components/EditSupplierModal.tsx
 import React, { useState, useEffect } from 'react';
 import {
     Dialog,
