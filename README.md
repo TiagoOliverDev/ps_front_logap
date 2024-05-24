@@ -1,46 +1,110 @@
-# Getting Started with Create React App
+<h1 align="center">Front end Points manager</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Front end for points system
 
-## Available Scripts
+<hr/>
 
-In the project directory, you can run:
 
-### `npm start`
+Home
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/home.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Página de Fornecedores (gestão)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/fornecedores.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Modal de cadastro de fornecedor
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdCadastroFornecedores.png)
 
-### `npm test`
+Modal de edição
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdEditar.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Modal de exclusão
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdExcluir.png)
 
-### `npm run build`
+Página de produtos (gestão)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/produtos.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Página de dashboard e relatório (gestão)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/dash.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Exemplo de relatório
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/relatorios.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+<hr/>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Features 
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Home page de produtos catalogados
+- Gestão de fornecedores
+- Gestão de produtos
+- Dashboard
+- Relatórios
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<hr/>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# Technology
 
-## Learn More
+I used the following technologies:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- React
+- React router dom
+- MUI
+- Axios
+- Taillwind
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
+<hr/>
+
+# Steps for run project
+
+## Step 1: Clone the repository
+
+- Choose a folder in your local machine where you want this repository to be copied
+
+- Clone this [repository](https://github.com/TiagoOliverDev/ps_front_logap.git) to your local machine 
+
+   ```
+  git clone https://github.com/TiagoOliverDev/ps_front_logap.git
+  ```
+
+- Navigate to `cd ps_front_logap`  directory.
+
+## Step 2: 
+
+install all the app dependencies on the command line run:
+
+  ```
+  npm install
+  ```
+
+vá em src\shared\environment\index.ts e sete API URL BACKEND no URL_BASE
+
+## Step 3: 
+
+Open folder project and open a terminal and run the following command:
+
+  ```
+  npm start
+  ```
+## Step 4: Vá no repositório backend e siga as instruções
+
+  ```
+  https://github.com/TiagoOliverDev/ps_backend_logap
+  ```
+  
+<hr/>
+
+
+## Author
+
+:man: **Tiago Oliveira**
+
+- [GitHub](https://github.com/TiagoOliverDev/)
+- [LinkedIn](https://www.linkedin.com/in/tiago-oliveira-49a2a6205/)
+
+## 🤝 Contributing
+- Contributions, issues, and feature requests are welcome!
+- Feel free to check the [issues page](https://github.com/TiagoOliverDev/ps_front_logap/issues).
+
+# Show your support
+Give a ⭐ if you like this project!
