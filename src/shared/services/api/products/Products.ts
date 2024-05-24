@@ -1,6 +1,6 @@
 import { Enviroment } from "../../../environment";
 import { API } from "../axiosConfig";
-import { IApiResponseProducts, IProduct, INewProduct } from '../../../../@types/IApiResponseProducts'; 
+import { IApiResponseProducts, IProduct, INewProduct, IProductUpdate } from '../../../../@types/IApiResponseProducts'; 
 
 
 export interface IDetaisCollaborator {
@@ -29,12 +29,22 @@ const getAll = async (): Promise<IProduct[] | Error> => {
     }
 };
 
-export const create = async (product: INewProduct): Promise<IProduct | Error> => {
+const create = async (product: INewProduct): Promise<IProduct | Error> => {
     try {
         const { data } = await API.post<IProduct>('/products/cadastrar', product);
         return data;
     } catch (error: any) {
         return new Error(error.response?.data.message || "Erro ao cadastrar o produto.");
+    }
+};
+
+const updateById = async (id: number, productData: IProductUpdate): Promise<void | Error> => {
+    try {
+        const response = await API.put(`/products/editar/${id}`, productData);
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao atualizar o produto:', error);
+        return new Error((error as { message: string }).message || "Erro ao atualizar o produto.");
     }
 };
 
@@ -56,14 +66,7 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
     };
 };
 
-const updateById = async (id: number, dados: IDetaisCollaborator): Promise<void | Error> => {
-    try {
-        await API.put(`/collaborator/collaborator/${id}`, dados);
-    } catch (error) {
-        console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao atualizar o registro.");
-    };
-};
+
 
 const deleteById = async (id: number): Promise<void | Error> => {
     try {

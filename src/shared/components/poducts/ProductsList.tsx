@@ -19,6 +19,11 @@ import { IColumns } from '../../../@types/IColumns';
 import { INewProduct, IProduct } from '../../../@types/IApiResponseProducts';
 import { ProductsService } from '../../services/api/products/Products';
 import ProductsFormModal from './ProductsFormModal';
+import ProductEditModal from './ProductEditModal';
+import { ICategory } from '../../../@types/IApiResponseCategories';
+import { ISupplier } from '../../../@types/ISupplier';
+import { CategoriesService } from '../../services/api/categories/Categories';
+import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
 
 
 const columns: IColumns[] = [
@@ -37,6 +42,11 @@ const ProductsList: React.FC = () => {
     const [rowsPerPage, setRowsPerPage] = useState(7);
     const [error, setError] = useState<string | null>(null);
     const [openModal, setOpenModal] = useState(false);
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -48,7 +58,27 @@ const ProductsList: React.FC = () => {
             }
         };
 
+        const fetchCategories = async () => {
+            const result = await CategoriesService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setCategories(result);
+            }
+        };
+
+        const fetchSuppliers = async () => {
+            const result = await SuppliersService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setSuppliers(result);
+            }
+        };
+
         fetchProducts();
+        fetchCategories();
+        fetchSuppliers();
     }, []);
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -58,10 +88,6 @@ const ProductsList: React.FC = () => {
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
-    };
-
-    const handleEdit = (id: number) => {
-        console.log('Editar:', id);
     };
 
     const handleDelete = (id: number) => {
@@ -79,6 +105,22 @@ const ProductsList: React.FC = () => {
         } else {
             setProducts(prevProducts => [...prevProducts, result]);
             setOpenModal(false); 
+        }
+    };
+
+    const handleEdit = (id: number) => {
+        const product = products.find(p => p.id === id);
+        setSelectedProduct(product || null);
+        setOpenEditModal(true);
+    };
+
+    const handleUpdate = async (productData: IProduct) => {
+        const result = await ProductsService.updateById(productData.id, productData);
+        if (result instanceof Error) {
+            console.error(result.message);
+        } else {
+            setProducts(prev => prev.map(p => p.id === productData.id ? { ...productData } : p));
+            setOpenEditModal(false);
         }
     };
 
@@ -173,6 +215,14 @@ const ProductsList: React.FC = () => {
                 open={openModal}
                 onClose={() => setOpenModal(false)}
                 onSave={handleSave}
+            />
+            <ProductEditModal
+                open={openEditModal}
+                onClose={() => setOpenEditModal(false)}
+                onSave={handleUpdate}
+                product={selectedProduct}
+                categories={categories}
+                suppliers={suppliers}
             />
         </Container>
     );
