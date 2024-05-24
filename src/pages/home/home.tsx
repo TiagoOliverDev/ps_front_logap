@@ -5,25 +5,20 @@ import { Search, Favorite, ShoppingCart, Visibility } from '@mui/icons-material'
 import StarIcon from '@mui/icons-material/Star';
 import { CategoriesService } from '../../shared/services/api/categories/Categories'; 
 import { IApiResponseCategories, ICategory } from '../../@types/IApiResponseCategories'; 
+import { IProduct } from '../../@types/IApiResponseProducts';
+import { ProductsService } from '../../shared/services/api/products/Products';
 
-
-const products = [
-    { id: 1, name: 'Produto 1', category: 'Celulares', price: 1000, image: 'https://via.placeholder.com/150' },
-    { id: 2, name: 'Produto 2', category: 'Notebooks', price: 2000, image: 'https://via.placeholder.com/150' },
-    { id: 3, name: 'Produto 3', category: 'Bebidas', price: 50, image: 'https://via.placeholder.com/150' },
-    { id: 4, name: 'Produto 4', category: 'Eletrônicos', price: 300, image: 'https://via.placeholder.com/150' },
-    { id: 5, name: 'Produto 5', category: 'Roupas', price: 150, image: 'https://via.placeholder.com/150' },
-];
 
 export const Home: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('GERAL');
     const [categories, setCategories] = useState<ICategory[]>([]);
+    const [products, setProducts] = useState<IProduct[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const filteredProducts = products.filter(product => 
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
-        (selectedCategory === 'GERAL' ? true : product.category === selectedCategory)
+        (selectedCategory === 'GERAL' ? true : product.category_id === Number(selectedCategory))
     );
 
     useEffect(() => {
@@ -36,12 +31,24 @@ export const Home: React.FC = () => {
             }
         };
 
+        const fetchProducts = async () => {
+            const result = await ProductsService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setProducts(result);
+            }
+        };
+
         fetchCategories();
+        fetchProducts();
     }, []);
 
     if (error) {
         return <div>Error: {error}</div>;
     }
+
+    console.log('data: ', products)
 
     return (
         <HomeMaster title='Bem vindo a sua HomePage de produtos!'>
@@ -86,13 +93,12 @@ export const Home: React.FC = () => {
                     {filteredProducts.map(product => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
                             <Card style={{borderRadius: '11px', backgroundColor: '#000000'}} >
-                                <img src={product.image} alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                                <img src='https://via.placeholder.com/150' alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                                 <CardContent>
                                     <Typography style={{color: '#616161'}} variant="h6">{product.name}</Typography>
-                                    <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">R$ {product.price}</Typography>
+                                    <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">R$ {product.sale_price}</Typography>
                                 </CardContent>
                                 <CardActions>
-                                    {/* <Button startIcon={<Visibility />} size="small">Ver mais</Button> */}
                                     <Button startIcon={<Favorite />} size="small">Favoritar</Button>
                                     <Button startIcon={<ShoppingCart />} size="small" color="primary">Comprar</Button>
                                 </CardActions>
