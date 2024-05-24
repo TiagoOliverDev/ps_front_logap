@@ -1,3 +1,3 @@
 export const Enviroment = {
-    URL_BASE: "https://api.homologation.cliqdrive.com.br",
+    URL_BASE: "http://127.0.0.1:8080",
 };

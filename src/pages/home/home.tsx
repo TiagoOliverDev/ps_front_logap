@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, CardActions, TextField, Button, Container, Grid } from '@mui/material';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
 import { Search, Favorite, ShoppingCart, Visibility } from '@mui/icons-material';
 import StarIcon from '@mui/icons-material/Star';
+import { CategoriesService } from '../../shared/services/api/categories/Categories'; 
+import { IApiResponseCategories, ICategory } from '../../@types/IApiResponseCategories'; 
 
-const categories = ['GERAL', 'Celulares', 'Notebooks', 'Bebidas', 'Eletrônicos', 'Roupas'];
+
 const products = [
     { id: 1, name: 'Produto 1', category: 'Celulares', price: 1000, image: 'https://via.placeholder.com/150' },
     { id: 2, name: 'Produto 2', category: 'Notebooks', price: 2000, image: 'https://via.placeholder.com/150' },
@@ -16,11 +18,30 @@ const products = [
 export const Home: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('GERAL');
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     const filteredProducts = products.filter(product => 
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
         (selectedCategory === 'GERAL' ? true : product.category === selectedCategory)
     );
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const result = await CategoriesService.getAll();
+            if (result instanceof Error) {
+                setError(result.message);
+            } else {
+                setCategories(result);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <HomeMaster title='Bem vindo a sua HomePage de produtos!'>
@@ -41,18 +62,26 @@ export const Home: React.FC = () => {
                 </Box>
 
                 <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
+                    <Button 
+                        key="GERAL" 
+                        onClick={() => setSelectedCategory('GERAL')}
+                        variant={selectedCategory === 'GERAL' ? 'contained' : 'outlined'}
+                        sx={{ margin: '0 8px' }}
+                    >
+                        GERAL
+                    </Button>
                     {categories.map(category => (
                         <Button 
-                            key={category} 
-                            onClick={() => setSelectedCategory(category)}
-                            variant={selectedCategory === category ? 'contained' : 'outlined'}
+                            key={category.id} 
+                            onClick={() => setSelectedCategory(category.name)}
+                            variant={selectedCategory === category.name ? 'contained' : 'outlined'}
                             sx={{ margin: '0 8px' }}
                         >
-                            {category}
+                            {category.name}
                         </Button>
                     ))}
                 </Box>
-
+                
                 <Grid container spacing={4}>
                     {filteredProducts.map(product => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
