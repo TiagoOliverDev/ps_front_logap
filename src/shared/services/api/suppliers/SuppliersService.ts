@@ -2,7 +2,7 @@ import { Suppliers } from './../../../../pages/suppliers/suppliers';
 import { Enviroment } from "../../../environment";
 import { API } from "../axiosConfig";
 import { IApiResponseProducts, IProduct } from '../../../../@types/IApiResponseProducts'; 
-import { ISupplier } from '../../../../@types/ISupplier'; 
+import { ISupplier, INewSupplier } from '../../../../@types/ISupplier'; 
 
 
 export interface IDetaisCollaborator {
@@ -31,6 +31,21 @@ const getAll = async (): Promise<ISupplier[] | Error> => {
     }
 };
 
+const create = async (dados: INewSupplier): Promise<number | Error> => {
+    try {
+        const { data } = await API.post<ISupplier>("/suppliers/cadastrar", dados);
+
+        if (data) {
+            return data.id;
+        }
+        
+        return new Error("Erro ao cadastrar o fornecedor");
+    } catch (error) {
+        console.error(error);
+        return new Error((error as { message: string }).message || "Erro ao cadastrar o fornecedor");
+    }
+}
+
 const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
     try {
         const urlRelative = `/collaborator/collaborator/${id}`;
@@ -43,22 +58,6 @@ const getById = async (id: number): Promise<IDetaisCollaborator | Error> => {
 
         return new Error("Erro ao  consultar o registro.");
 
-    } catch (error) {
-        console.error(error);
-        return new Error((error as { message: string }).message || "Erro ao consultar o registro.");
-    };
-};
-
-const create = async (dados: Omit<IDetaisCollaborator, "id">): Promise<number | Error> => {
-    try {
-
-        const { data } = await API.post<IDetaisCollaborator>("/collaborator/register_collaborator", dados);
-
-        if (data) {
-            return data.id;
-        };
-
-        return new Error("Erro ao criar o registro.");
     } catch (error) {
         console.error(error);
         return new Error((error as { message: string }).message || "Erro ao consultar o registro.");

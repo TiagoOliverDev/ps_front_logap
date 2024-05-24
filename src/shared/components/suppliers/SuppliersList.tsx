@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
 import { IColumnsSuppliers } from '../../../@types/IColumnsSuppliers'; 
-import { ISupplier } from '../../../@types/ISupplier';
+import { ISupplier, INewSupplier  } from '../../../@types/ISupplier';
 import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
 import SupplierFormModal from './SupplierFormModal';
 import ConfirmationModal from '../modais/ConfirmationModal';
@@ -85,9 +85,16 @@ const SuppliersList: React.FC = () => {
         setOpenModal(true);
     };
 
-    const handleSave = (name: string, email: string, phone: string) => {
-        console.log('Salvar:', { name, email, phone });
-        // Adicione a lógica para salvar o fornecedor aqui
+    const handleSave = async (name: string, email: string, phone: string) => {
+        const newSupplier: INewSupplier = { name, email, phone };
+        const result = await SuppliersService.create(newSupplier);
+        if (result instanceof Error) {
+            setError(result.message);
+        } else {
+            const newSupplierWithId = { id: result as number, name, email, phone };
+            setSuppliers((prevSuppliers) => [...prevSuppliers, newSupplierWithId]);
+        }
+        setOpenAddModal(false);
     };
 
     const handleConfirmDelete = () => {
