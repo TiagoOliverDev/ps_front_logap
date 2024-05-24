@@ -8,15 +8,9 @@ import {
     TextField,
     Button
 } from '@mui/material';
+import { IEditSupplierModalProps } from '../../../@types/IEditSupplierModalProps'; 
 
-interface EditSupplierModalProps {
-    open: boolean;
-    onClose: () => void;
-    onSave: (id: number, name: string, email: string, phone: string) => void;
-    supplier: { id: number, name: string, email: string, phone: string } | null;
-}
-
-const SupplierEditModal: React.FC<EditSupplierModalProps> = ({ open, onClose, onSave, supplier }) => {
+const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, onSave, supplier }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
