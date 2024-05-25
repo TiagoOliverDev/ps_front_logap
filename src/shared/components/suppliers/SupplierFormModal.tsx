@@ -46,8 +46,8 @@ const SupplierFormModal: React.FC<ISupplierFormModalProps> = ({ open, onClose, o
             formik.handleSubmit();
         } catch (err) {
             if (err instanceof yup.ValidationError) {
-                const validationErrors = err.inner.map(e => e.message).join('\n');
-                setAlertMessage(validationErrors);
+                // const validationErrors = err.inner.map(e => e.message).join('\n');
+                setAlertMessage("Erro ao cadastrar fornecedor, revise os campos mano!");
                 setAlertSeverity("error");
             }
         }
