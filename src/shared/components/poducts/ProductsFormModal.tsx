@@ -9,9 +9,9 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel,
     Typography,
-    Box
+    Box,
+    Grid
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -24,7 +24,6 @@ import { IProductFormModalProps } from '../../../@types/IProductFormModalProps';
 import { AlertDinamic } from '../alert/AlertDinamic';
 import { LabelGeneral } from '../label/LabelGeneral';
 
-
 const validationSchema = yup.object({
     name: yup.string().required('Nome é obrigatório'),
     purchase_price: yup.number().required('Preço de compra é obrigatório').positive('Deve ser um número positivo'),
@@ -34,6 +33,17 @@ const validationSchema = yup.object({
     supplier_id: yup.number().required('Fornecedor é obrigatório').min(1, 'Selecione um fornecedor')
 });
 
+
+const textFieldStyle = {
+    '& .MuiInputBase-root': {
+        borderRadius: '12px',
+        backgroundColor: '#E8F0F3'
+    },
+    '& .MuiInputLabel-root': {
+        color: 'black'
+    }
+};
+
 const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, onSave }) => {
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -42,6 +52,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
     const [newCategory, setNewCategory] = useState<string>('');
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
     const [alertSeverity, setAlertSeverity] = useState<'success' | 'error' | undefined>(undefined);
+    const [attemptedSubmit, setAttemptedSubmit] = useState(false); 
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -91,6 +102,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
     };
 
     const handleSubmit = async () => {
+        setAttemptedSubmit(true);
         setAlertMessage(null);
         try {
             await validationSchema.validate(formik.values, { abortEarly: false });
@@ -112,129 +124,151 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
         }
     }, [alertMessage]);
 
+    const showError = (field: keyof typeof formik.values) => {
+        return attemptedSubmit && formik.touched[field] && Boolean(formik.errors[field]);
+    };
 
     return (
         <>
             {alertMessage && <AlertDinamic message={alertMessage} severityTipo={alertSeverity} />}
-            <Dialog open={open} onClose={onClose} PaperProps={{ sx: { width: '600px', maxHeight: '90vh', backgroundColor: '#10141E', color: '#FFFFFF' } }}>
+            <Dialog open={open} onClose={onClose} PaperProps={{ sx: { width: '80vw', maxWidth: '1000px', height: '57vh', backgroundColor: '#10141E', color: '#FFFFFF' } }}>
                 <DialogTitle>Cadastrar Produtos</DialogTitle>
                 <form onSubmit={formik.handleSubmit}>
                     <DialogContent>
-                        <LabelGeneral htmlFor='idNameProduct' title='Nome' />
-                        <TextField
-                            id='idNameProduct'
-                            autoFocus
-                            margin="dense"
-                            name="name"
-                            type="text"
-                            fullWidth
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.name && Boolean(formik.errors.name)}
-                            helperText={formik.touched.name && formik.errors.name}
-                            sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px' }}
-                        />
-                        <LabelGeneral htmlFor='idPurchasePrice' title='Preço de Compra' />
-                        <TextField
-                            id='idPurchasePrice'
-                            margin="dense"
-                            name="purchase_price"
-                            type="number"
-                            fullWidth
-                            value={formik.values.purchase_price}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.purchase_price && Boolean(formik.errors.purchase_price)}
-                            helperText={formik.touched.purchase_price && formik.errors.purchase_price}
-                            sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
-                        />
-                        <LabelGeneral htmlFor='idQtdProducts' title='Quantidade' />
-                        <TextField
-                            id='idQtdProducts'
-                            margin="dense"
-                            name="quantity"
-                            type="number"
-                            fullWidth
-                            value={formik.values.quantity}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.quantity && Boolean(formik.errors.quantity)}
-                            helperText={formik.touched.quantity && formik.errors.quantity}
-                            sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
-                        />
-                        <LabelGeneral htmlFor='idSalePrice' title='Preço de Venda' />
-                        <TextField
-                            id='idSalePrice'
-                            margin="dense"
-                            name="sale_price"
-                            type="number"
-                            fullWidth
-                            value={formik.values.sale_price}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.sale_price && Boolean(formik.errors.sale_price)}
-                            helperText={formik.touched.sale_price && formik.errors.sale_price}
-                            sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
-                        />
-                        <LabelGeneral htmlFor='idCategory' title='Categoria' />
-                        <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
-                            <Select
-                                id='idCategory'
-                                name="category_id"
-                                value={formik.values.category_id}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                error={formik.touched.category_id && Boolean(formik.errors.category_id)}
-                                sx={{ color: '#FFFFFF' }}
-                            >
-                                {categories.map(category => (
-                                    <MenuItem key={category.id} value={category.id}>
-                                        {category.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            <Box mt={1} display="flex" justifyContent="flex-end">
-                                <Typography variant="body2" sx={{ color: '#FFFFFF', cursor: 'pointer' }} onClick={() => setShowNewCategoryField(!showNewCategoryField)}>
-                                    {showNewCategoryField ? 'Cancelar' : 'Não encontrou a categoria desejada?'}
-                                </Typography>
-                            </Box>
-                            {showNewCategoryField && (
-                                <Box mt={1} display="flex">
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Box mb={2}>
+                                    <LabelGeneral htmlFor='idNameProduct' title='Nome' />
                                     <TextField
+                                        id='idNameProduct'
+                                        autoFocus
                                         margin="dense"
-                                        label="Nova Categoria"
+                                        name="name"
                                         type="text"
                                         fullWidth
-                                        value={newCategory}
-                                        onChange={(e) => setNewCategory(e.target.value)}
-                                        sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px' }}
+                                        value={formik.values.name}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={showError('name')}
+                                        helperText={showError('name') ? formik.errors.name : ''}
+                                        FormHelperTextProps={{ sx: { margin: 0, height: (formik.touched.name && formik.errors.name) ? 'auto' : 0, visibility: (formik.touched.name && formik.errors.name) ? 'visible' : 'hidden' } }}
+                                        sx={textFieldStyle}
                                     />
-                                    <Button onClick={handleAddCategory} variant="outlined" sx={{ marginLeft: 1 }}>
-                                        Adicionar
-                                    </Button>
                                 </Box>
-                            )}
-                        </FormControl>
-
-                        <LabelGeneral htmlFor='idSupplier' title='Fornecedor' />
-                        <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
-                            <Select
-                                id='idSupplier'
-                                name="supplier_id"
-                                value={formik.values.supplier_id}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                error={formik.touched.supplier_id && Boolean(formik.errors.supplier_id)}
-                                sx={{ color: '#FFFFFF' }}
-                            >
-                                {suppliers.map(supplier => (
-                                    <MenuItem key={supplier.id} value={supplier.id}>
-                                        {supplier.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                                
+                                <Box mb={2}>
+                                <LabelGeneral htmlFor='idSupplier' title='Fornecedor' />
+                                    <FormControl fullWidth sx={{ backgroundColor: '#FFFFFF', borderRadius: '12px', marginTop: '8px'  }}>
+                                        <Select
+                                            id='idSupplier'
+                                            name="supplier_id"
+                                            value={formik.values.supplier_id}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            error={formik.touched.supplier_id && Boolean(formik.errors.supplier_id)}
+                                        >
+                                            {suppliers.map(supplier => (
+                                                <MenuItem key={supplier.id} value={supplier.id}>
+                                                    {supplier.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Box mb={2}>
+                                    <LabelGeneral htmlFor='idCategory' title='Categoria' />
+                                    <FormControl fullWidth sx={{ backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '11px' }}>
+                                        <Select
+                                            id='idCategory'
+                                            name="category_id"
+                                            value={formik.values.category_id}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            error={formik.touched.category_id && Boolean(formik.errors.category_id)}
+                                        >
+                                            {categories.map(category => (
+                                                <MenuItem key={category.id} value={category.id}>
+                                                    {category.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                        <Box textAlign='center'>
+                                            <Typography variant="body2" sx={{ color: 'black', cursor: 'pointer' }} onClick={() => setShowNewCategoryField(!showNewCategoryField)}>
+                                                {showNewCategoryField ? 'Cancelar' : 'Não encontrou a categoria desejada?'}
+                                            </Typography>
+                                        </Box>
+                                        {showNewCategoryField && (
+                                            <Box mt={1} display="flex">
+                                                <TextField
+                                                    label="Nova Categoria"
+                                                    type="text"
+                                                    fullWidth
+                                                    value={newCategory}
+                                                    onChange={(e) => setNewCategory(e.target.value)}
+                                                    sx={textFieldStyle}
+                                                />
+                                                <Button onClick={handleAddCategory} variant="contained" sx={{ marginLeft: 1 }}>
+                                                    Adicionar
+                                                </Button>
+                                            </Box>
+                                        )}
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Box mb={2}>
+                                    <LabelGeneral htmlFor='idSalePrice' title='Preço de Venda' />
+                                    <TextField
+                                        id='idSalePrice'
+                                        margin="dense"
+                                        name="sale_price"
+                                        type="number"
+                                        fullWidth
+                                        value={formik.values.sale_price}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.sale_price && Boolean(formik.errors.sale_price)}
+                                        helperText={formik.touched.sale_price && formik.errors.sale_price ? formik.errors.sale_price : ' '}
+                                        FormHelperTextProps={{ sx: { margin: 0, height: (formik.touched.sale_price && formik.errors.sale_price) ? 'auto' : 0, visibility: (formik.touched.sale_price && formik.errors.sale_price) ? 'visible' : 'hidden' } }}
+                                        sx={textFieldStyle}
+                                    />
+                                </Box>
+                                <Box mb={2}>
+                                    <LabelGeneral htmlFor='idPurchasePrice' title='Preço de Compra' />
+                                    <TextField
+                                        id='idPurchasePrice'
+                                        margin="dense"
+                                        name="purchase_price"
+                                        type="number"
+                                        fullWidth
+                                        value={formik.values.purchase_price}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.purchase_price && Boolean(formik.errors.purchase_price)}
+                                        helperText={formik.touched.purchase_price && formik.errors.purchase_price ? formik.errors.purchase_price : ' '}
+                                        FormHelperTextProps={{ sx: { margin: 0, height: (formik.touched.purchase_price && formik.errors.purchase_price) ? 'auto' : 0, visibility: (formik.touched.purchase_price && formik.errors.purchase_price) ? 'visible' : 'hidden' } }}
+                                        sx={textFieldStyle}
+                                    />
+                                </Box>
+                                <Box mb={2}>
+                                    <LabelGeneral htmlFor='idQtdProducts' title='Quantidade' />
+                                    <TextField
+                                        id='idQtdProducts'
+                                        margin="dense"
+                                        name="quantity"
+                                        type="number"
+                                        fullWidth
+                                        value={formik.values.quantity}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+                                        helperText={formik.touched.quantity && formik.errors.quantity ? formik.errors.quantity : ' '}
+                                        FormHelperTextProps={{ sx: { margin: 0, height: (formik.touched.quantity && formik.errors.quantity) ? 'auto' : 0, visibility: (formik.touched.quantity && formik.errors.quantity) ? 'visible' : 'hidden' } }}
+                                        sx={textFieldStyle}
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </DialogContent>
                     <DialogActions>
                         <Button variant='outlined' onClick={onClose} color="error">
