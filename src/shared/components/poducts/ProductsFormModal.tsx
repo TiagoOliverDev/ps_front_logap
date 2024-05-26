@@ -125,6 +125,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
     }, [alertMessage]);
 
     const showError = (field: keyof typeof formik.values) => {
+        // para não mostrar erro no primeiro campo NOME
         return attemptedSubmit && formik.touched[field] && Boolean(formik.errors[field]);
     };
 
