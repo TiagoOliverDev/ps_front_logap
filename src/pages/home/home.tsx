@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, CardActions, TextField, Button, Container, Grid } from '@mui/material';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
 import { Search, Favorite, ShoppingCart } from '@mui/icons-material';
-import { CategoriesService } from '../../shared/services/api/categories/Categories'; 
+import { CategoriesService } from '../../shared/services/api/categories/CategoriesService'; 
 import { ICategory } from '../../@types/IApiResponseCategories'; 
 import { IProduct } from '../../@types/IApiResponseProducts';
 import { ProductsService } from '../../shared/services/api/products/ProductsService';

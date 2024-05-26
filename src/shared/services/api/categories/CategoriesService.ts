@@ -1,5 +1,5 @@
 import { API } from "../axiosConfig";
-import { ICategory } from '../../../../@types/IApiResponseCategories';
+import { ICategory, INewCategory } from '../../../../@types/IApiResponseCategories';
 
 
 const getAll = async (): Promise<ICategory[] | Error> => {
@@ -22,7 +22,18 @@ const getAll = async (): Promise<ICategory[] | Error> => {
     };
 };
 
+const create = async (category: INewCategory): Promise<ICategory | Error> => {
+    try {
+        const { data } = await API.post<ICategory>('/categories/cadastrar', category);
+        return data;
+    } catch (error: any) {
+        return new Error(error.response?.data.message || "Erro ao cadastrar a categoria.");
+    }
+};
+
+
 
 export const CategoriesService = {
     getAll,
+    create,
 };

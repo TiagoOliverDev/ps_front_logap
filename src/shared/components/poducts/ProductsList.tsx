@@ -22,7 +22,7 @@ import ProductsFormModal from './ProductsFormModal';
 import ProductEditModal from './ProductEditModal';
 import { ICategory } from '../../../@types/IApiResponseCategories';
 import { ISupplier } from '../../../@types/ISupplier';
-import { CategoriesService } from '../../services/api/categories/Categories';
+import { CategoriesService } from '../../services/api/categories/CategoriesService';
 import ConfirmationModal from '../modais/ConfirmationModal';
 import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
 

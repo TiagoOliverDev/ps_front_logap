@@ -19,7 +19,7 @@ import { ICategory } from '../../@types/IApiResponseCategories';
 import { ISupplier } from '../../@types/ISupplier';
 import { IProduct } from '../../@types/IApiResponseProducts';
 import { ProductsService } from '../../shared/services/api/products/ProductsService';
-import { CategoriesService } from '../../shared/services/api/categories/Categories';
+import { CategoriesService } from '../../shared/services/api/categories/CategoriesService';
 import { SuppliersService } from '../../shared/services/api/suppliers/SuppliersService';
 import { ReportsService } from '../../shared/services/api/reports/ReportsService';
 

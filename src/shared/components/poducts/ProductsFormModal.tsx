@@ -17,7 +17,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { INewProduct } from '../../../@types/IApiResponseProducts'; 
 import { ICategory } from '../../../@types/IApiResponseCategories';
-import { CategoriesService } from '../../services/api/categories/Categories';
+import { CategoriesService } from '../../services/api/categories/CategoriesService';
 import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
 import { ISupplier } from '../../../@types/ISupplier';
 import { IProductFormModalProps } from '../../../@types/IProductFormModalProps'; 
@@ -95,11 +95,28 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
         }
     });
 
-    const handleAddCategory = () => {
-        console.log('Nova categoria:', newCategory);
-        setShowNewCategoryField(false);
-        setNewCategory('');
+    const handleAddCategory = async () => {
+        if (!newCategory) {
+            setAlertMessage("Por favor, insira um nome para a categoria.");
+            setAlertSeverity("error");
+            return;
+        }
+    
+        const newCategoryData = { name: newCategory };
+        const result = await CategoriesService.create(newCategoryData);
+    
+        if (result instanceof Error) {
+            setAlertMessage(result.message);
+            setAlertSeverity("error");
+        } else {
+            setCategories([...categories, result]);
+            setAlertMessage("Nova categoria cadastrada com sucesso!");
+            setAlertSeverity("success");
+            setNewCategory('');
+            setShowNewCategoryField(false);
+        }
     };
+    
 
     const handleSubmit = async () => {
         setAttemptedSubmit(true);
@@ -208,7 +225,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                                                     onChange={(e) => setNewCategory(e.target.value)}
                                                     sx={textFieldStyle}
                                                 />
-                                                <Button onClick={handleAddCategory} variant="contained" sx={{ marginLeft: 1 }}>
+                                                <Button onClick={handleAddCategory} variant="outlined" sx={{ marginLeft: 1 }}>
                                                     Adicionar
                                                 </Button>
                                             </Box>
