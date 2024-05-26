@@ -22,6 +22,7 @@ import { SuppliersService } from '../../services/api/suppliers/SuppliersService'
 import { ISupplier } from '../../../@types/ISupplier';
 import { IProductFormModalProps } from '../../../@types/IProductFormModalProps'; 
 import { AlertDinamic } from '../alert/AlertDinamic';
+import { LabelGeneral } from '../label/LabelGeneral';
 
 
 const validationSchema = yup.object({
@@ -51,7 +52,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                 setCategories(result);
             }
         };
-
+        
         const fetchSuppliers = async () => {
             const result = await SuppliersService.getAll();
             if (result instanceof Error) {
@@ -119,11 +120,12 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                 <DialogTitle>Cadastrar Produtos</DialogTitle>
                 <form onSubmit={formik.handleSubmit}>
                     <DialogContent>
+                        <LabelGeneral htmlFor='idNameProduct' title='Nome' />
                         <TextField
+                            id='idNameProduct'
                             autoFocus
                             margin="dense"
                             name="name"
-                            label="Nome"
                             type="text"
                             fullWidth
                             value={formik.values.name}
@@ -133,10 +135,11 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                             helperText={formik.touched.name && formik.errors.name}
                             sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px' }}
                         />
+                        <LabelGeneral htmlFor='idPurchasePrice' title='Preço de Compra' />
                         <TextField
+                            id='idPurchasePrice'
                             margin="dense"
                             name="purchase_price"
-                            label="Preço de Compra"
                             type="number"
                             fullWidth
                             value={formik.values.purchase_price}
@@ -146,10 +149,11 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                             helperText={formik.touched.purchase_price && formik.errors.purchase_price}
                             sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
                         />
+                        <LabelGeneral htmlFor='idQtdProducts' title='Quantidade' />
                         <TextField
+                            id='idQtdProducts'
                             margin="dense"
                             name="quantity"
-                            label="Quantidade"
                             type="number"
                             fullWidth
                             value={formik.values.quantity}
@@ -159,10 +163,11 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                             helperText={formik.touched.quantity && formik.errors.quantity}
                             sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
                         />
+                        <LabelGeneral htmlFor='idSalePrice' title='Preço de Venda' />
                         <TextField
+                            id='idSalePrice'
                             margin="dense"
                             name="sale_price"
-                            label="Preço de Venda"
                             type="number"
                             fullWidth
                             value={formik.values.sale_price}
@@ -172,9 +177,10 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                             helperText={formik.touched.sale_price && formik.errors.sale_price}
                             sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
                         />
+                        <LabelGeneral htmlFor='idCategory' title='Categoria' />
                         <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
-                            <InputLabel sx={{ color: '#FFFFFF' }}>Categoria</InputLabel>
                             <Select
+                                id='idCategory'
                                 name="category_id"
                                 value={formik.values.category_id}
                                 onChange={formik.handleChange}
@@ -210,9 +216,11 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                                 </Box>
                             )}
                         </FormControl>
+
+                        <LabelGeneral htmlFor='idSupplier' title='Fornecedor' />
                         <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
-                            <InputLabel sx={{ color: '#FFFFFF' }}>Fornecedor</InputLabel>
                             <Select
+                                id='idSupplier'
                                 name="supplier_id"
                                 value={formik.values.supplier_id}
                                 onChange={formik.handleChange}
