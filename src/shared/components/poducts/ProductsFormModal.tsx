@@ -131,7 +131,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
     return (
         <>
             {alertMessage && <AlertDinamic message={alertMessage} severityTipo={alertSeverity} />}
-            <Dialog open={open} onClose={onClose} PaperProps={{ sx: { width: '80vw', maxWidth: '1000px', height: '57vh', backgroundColor: '#10141E', color: '#FFFFFF' } }}>
+            <Dialog open={open} onClose={onClose} PaperProps={{ sx: { width: '75vw', maxWidth: '900px', height: '55vh', backgroundColor: '#10141E', color: '#FFFFFF' } }}>
                 <DialogTitle>Cadastrar Produtos</DialogTitle>
                 <form onSubmit={formik.handleSubmit}>
                     <DialogContent>
@@ -217,23 +217,6 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                             </Grid>
                             <Grid item xs={6}>
                                 <Box mb={2}>
-                                    <LabelGeneral htmlFor='idSalePrice' title='Preço de Venda' />
-                                    <TextField
-                                        id='idSalePrice'
-                                        margin="dense"
-                                        name="sale_price"
-                                        type="number"
-                                        fullWidth
-                                        value={formik.values.sale_price}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        error={formik.touched.sale_price && Boolean(formik.errors.sale_price)}
-                                        helperText={formik.touched.sale_price && formik.errors.sale_price ? formik.errors.sale_price : ' '}
-                                        FormHelperTextProps={{ sx: { margin: 0, height: (formik.touched.sale_price && formik.errors.sale_price) ? 'auto' : 0, visibility: (formik.touched.sale_price && formik.errors.sale_price) ? 'visible' : 'hidden' } }}
-                                        sx={textFieldStyle}
-                                    />
-                                </Box>
-                                <Box mb={2}>
                                     <LabelGeneral htmlFor='idPurchasePrice' title='Preço de Compra' />
                                     <TextField
                                         id='idPurchasePrice'
@@ -247,6 +230,23 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                                         error={formik.touched.purchase_price && Boolean(formik.errors.purchase_price)}
                                         helperText={formik.touched.purchase_price && formik.errors.purchase_price ? formik.errors.purchase_price : ' '}
                                         FormHelperTextProps={{ sx: { margin: 0, height: (formik.touched.purchase_price && formik.errors.purchase_price) ? 'auto' : 0, visibility: (formik.touched.purchase_price && formik.errors.purchase_price) ? 'visible' : 'hidden' } }}
+                                        sx={textFieldStyle}
+                                    />
+                                </Box>
+                                <Box mb={2}>
+                                    <LabelGeneral htmlFor='idSalePrice' title='Preço de Venda' />
+                                    <TextField
+                                        id='idSalePrice'
+                                        margin="dense"
+                                        name="sale_price"
+                                        type="number"
+                                        fullWidth
+                                        value={formik.values.sale_price}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.sale_price && Boolean(formik.errors.sale_price)}
+                                        helperText={formik.touched.sale_price && formik.errors.sale_price ? formik.errors.sale_price : ' '}
+                                        FormHelperTextProps={{ sx: { margin: 0, height: (formik.touched.sale_price && formik.errors.sale_price) ? 'auto' : 0, visibility: (formik.touched.sale_price && formik.errors.sale_price) ? 'visible' : 'hidden' } }}
                                         sx={textFieldStyle}
                                     />
                                 </Box>
