@@ -9,7 +9,9 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel
+    InputLabel,
+    Typography,
+    Box
 } from '@mui/material';
 import { INewProduct } from '../../../@types/IApiResponseProducts'; 
 import { ICategory } from '../../../@types/IApiResponseCategories';
@@ -17,7 +19,6 @@ import { CategoriesService } from '../../services/api/categories/Categories';
 import { SuppliersService } from '../../services/api/suppliers/SuppliersService';
 import { ISupplier } from '../../../@types/ISupplier';
 import { IProductFormModalProps } from '../../../@types/IProductFormModalProps'; 
-
 
 const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, onSave }) => {
     const [categories, setCategories] = useState<ICategory[]>([]);
@@ -31,8 +32,10 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
         category_id: 0,
         supplier_id: 0
     });
+    const [newCategory, setNewCategory] = useState<string>('');
+    const [showNewCategoryField, setShowNewCategoryField] = useState<boolean>(false);
 
-    useEffect(() =>{
+    useEffect(() => {
         const fetchCategories = async () => {
             const result = await CategoriesService.getAll();
             if (result instanceof Error) {
@@ -53,7 +56,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
 
         fetchCategories();
         fetchSuppliers();
-    }, [])
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name: string; value: any; } }) => {
         const { name, value } = e.target;
@@ -65,12 +68,19 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
         onClose();
     };
 
+    const handleAddCategory = () => {
+        // Implementar a lógica para adicionar uma nova categoria
+        console.log('Nova categoria:', newCategory);
+        setShowNewCategoryField(false);
+        setNewCategory('');
+    };
+
     if (error) {
         return <div>Error: {error}</div>;
     }
 
     return (
-        <Dialog open={open} onClose={onClose} PaperProps={{ sx: { backgroundColor: '#10141E', color: '#FFFFFF' } }}>
+        <Dialog open={open} onClose={onClose} PaperProps={{ sx: { width: '600px', maxHeight: '90vh', backgroundColor: '#10141E', color: '#FFFFFF' } }}>
             <DialogTitle>Cadastrar Produtos</DialogTitle>
             <DialogContent>
                 <TextField
@@ -82,7 +92,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                     fullWidth
                     value={product.name}
                     onChange={handleChange}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px' }}
+                    sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px' }}
                 />
                 <TextField
                     margin="dense"
@@ -92,7 +102,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                     fullWidth
                     value={product.purchase_price}
                     onChange={handleChange}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
+                    sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
                 />
                 <TextField
                     margin="dense"
@@ -102,7 +112,7 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                     fullWidth
                     value={product.quantity}
                     onChange={handleChange}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
+                    sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
                 />
                 <TextField
                     margin="dense"
@@ -112,15 +122,15 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                     fullWidth
                     value={product.sale_price}
                     onChange={handleChange}
-                    sx={{ input: { color: '#FFFFFF' }, label: { color: '#FFFFFF' }, backgroundColor: 'gray', borderRadius: '12px', marginTop: '18px' }}
+                    sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px'  }}
                 />
-                <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
+                <FormControl fullWidth sx={{ label: { color: 'black' }, marginTop: '18px', backgroundColor: '#E8F0F3', borderRadius: '12px' }}>
                     <InputLabel sx={{ color: '#FFFFFF' }}>Categoria</InputLabel>
                     <Select
                         name="category_id"
                         value={product.category_id}
                         onChange={handleChange}
-                        sx={{ color: '#FFFFFF' }}
+                        sx={{ label: { color: 'black' }, color: '#FFFFFF' }}
                     >
                         {categories.map(category => (
                             <MenuItem key={category.id} value={category.id}>
@@ -128,8 +138,32 @@ const ProductsFormModal: React.FC<IProductFormModalProps> = ({ open, onClose, on
                             </MenuItem>
                         ))}
                     </Select>
+                    <Box mt={1}>
+                        <Box mt={1} display="flex" justifyContent="flex-end">
+                            <Typography variant="body2" sx={{ color: 'black' , cursor: 'pointer' }} onClick={() => setShowNewCategoryField(!showNewCategoryField)}>
+                                {showNewCategoryField ? 'Cancelar' : 'Não encontrou a categoria desejada?'}
+                            </Typography>
+                        </Box>
+      
+                        {showNewCategoryField && (
+                            <Box mt={1} display="flex">
+                                <TextField
+                                    margin="dense"
+                                    label="Nova Categoria"
+                                    type="text"
+                                    // fullWidth
+                                    value={newCategory}
+                                    onChange={(e) => setNewCategory(e.target.value)}
+                                    sx={{ input: { color: 'black' }, label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px' }}
+                                />
+                                <Button onClick={handleAddCategory} variant="outlined" sx={{ marginLeft: 1, height: 50, width: 100, marginTop: 1.4 }}>
+                                    Adicionar
+                                </Button>
+                            </Box>
+                        )}
+                    </Box>
                 </FormControl>
-                <FormControl fullWidth sx={{ marginTop: '18px', backgroundColor: 'gray', borderRadius: '12px' }}>
+                <FormControl fullWidth sx={{label: { color: 'black' }, marginTop: '18px', backgroundColor: '#E8F0F3', borderRadius: '12px' }}>
                     <InputLabel sx={{ color: '#FFFFFF' }}>Fornecedor</InputLabel>
                     <Select
                         name="supplier_id"
