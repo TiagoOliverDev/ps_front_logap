@@ -11,7 +11,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 const registrationSchema = yup.object({
   email: yup.string().email('Email inválido').required('Email é obrigatório'),
-  password: yup.string().required('Senha é obrigatória').min(5, 'A senha deve ter pelo menos 5 caracteres'),
+  password: yup.string().required('Senha é obrigatória').min(8, 'A senha deve ter pelo menos 8 caracteres'),
   confirmPassword: yup.string()
      .oneOf([yup.ref('password')], 'As senhas devem coincidir')
      .required('A confirmação de senha é obrigatória')
