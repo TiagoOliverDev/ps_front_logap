@@ -62,6 +62,10 @@ I used the following technologies:
 
 <hr/>
 
+# ACCESS the deploy here
+
+- Project [DEMO](https://ps-front-logap.vercel.app/) 
+
 # Steps for run project
 
 ## Step 1: Clone the repository
