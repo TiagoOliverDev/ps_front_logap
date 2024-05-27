@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, CardActions, TextField, Button, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { AlertDinamic } from '../../shared/components/alert/AlertDinamic';
@@ -17,6 +18,7 @@ const registrationSchema = yup.object({
 });
 
 export const Register: React.FC = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showAlertError, setShowAlertError] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -33,13 +35,21 @@ export const Register: React.FC = () => {
     onSubmit: (values) => {
       setIsLoading(true);
       AuthService.register({ email: values.email, password: values.password })
-      .then((result: any) => {
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setShowAlertError(true);
-        setIsLoading(false);
-      });
+        .then(() => {
+          setIsLoading(false);
+          setAlertMessage('Cadastro realizado com sucesso!');
+          setAlertType('success');
+          setShowAlert(true);
+          setTimeout(() => {
+            navigate('/login');  
+          }, 3000); 
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          setAlertMessage(error.message || 'Erro ao realizar cadastro.');
+          setAlertType('error');
+          setShowAlert(true);
+        });
     },
   });
 

@@ -7,7 +7,6 @@ import {
     TextField,
     Button,
     FormControl,
-    InputLabel,
     Select,
     MenuItem,
     Grid
@@ -21,7 +20,7 @@ import { AlertDinamic } from '../alert/AlertDinamic';
 const validationSchema = yup.object({
     name: yup.string().required('Nome é obrigatório'),
     purchase_price: yup.number().required('Preço de compra é obrigatório').positive('Deve ser um número positivo'),
-    quantity: yup.number().required('Quantidade é obrigatória').min(1, 'A quantidade deve ser pelo menos 1'),
+    quantity: yup.number().required('Quantidade é obrigatória').min(0, 'A quantidade deve ser pelo menos 0'),
     sale_price: yup.number().required('Preço de venda é obrigatório').positive('Deve ser um número positivo'),
     category_id: yup.number().required('Categoria é obrigatória').min(1, 'Selecione uma categoria'),
     supplier_id: yup.number().required('Fornecedor é obrigatório').min(1, 'Selecione um fornecedor')
