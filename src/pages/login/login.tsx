@@ -13,7 +13,7 @@ const logo = 'logoLogin.png'
 
 const loginSchema = yup.object().shape({
   email: yup.string().email('Email inválido').required('Email é obrigatório'),
-  password: yup.string().required('Senha é obrigatória').min(5, 'A senha deve ter pelo menos 5 caracteres'),
+  password: yup.string().required('Senha é obrigatória').min(8, 'A senha deve ter pelo menos 8 caracteres'),
 });
 
 
