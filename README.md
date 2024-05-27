@@ -4,18 +4,23 @@ Front end
 
 <hr/>
 
+Login
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/login.png)
+
+Cadastro
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/register.png)
 
 Home
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/home.png)
 
 Página de Fornecedores (gestão)
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/fornecedores.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/fornecedoress.png)
 
 Modal de cadastro de fornecedor
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdCadastroFornecedores.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdCadastroFor.png)
 
 Modal de edição
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdEditar.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdEditarFornecedor.png)
 
 Modal de exclusão
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdExcluir.png)
@@ -24,7 +29,7 @@ Página de produtos (gestão)
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/produtos.png)
 
 Página de dashboard e relatório (gestão)
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/dash.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/dashboard.png)
 
 Exemplo de relatório
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/relatorios.png)
@@ -34,11 +39,12 @@ Exemplo de relatório
 
 # Features 
 
-- Home page de produtos catalogados
-- Gestão de fornecedores
-- Gestão de produtos
+- Auth and register account
+- Home page of cataloged products
+- Supplier management
+- Product management
 - Dashboard
-- Relatórios
+- Reports
 
 <hr/>
 
@@ -51,6 +57,7 @@ I used the following technologies:
 - MUI
 - Axios
 - Taillwind
+- Charts.js
 
 
 <hr/>
@@ -87,6 +94,10 @@ Open folder project and open a terminal and run the following command:
   npm start
   ```
 ## Step 4: go to the backend repository and follow the instructions for download
+
+- Click here [repository](https://github.com/TiagoOliverDev/ps_backend_logap)
+
+  Or copy..
 
   ```
   https://github.com/TiagoOliverDev/ps_backend_logap
