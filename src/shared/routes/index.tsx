@@ -5,6 +5,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useAppDrawerContext, useAuthContext } from "../contexts";
 import { Login } from '../../pages/login/login'; 
 import { IPrivateRouteProps } from '../../@types/IPrivateRouteProps';
+import { Register } from '../../pages/register/register';
 
 
 export const AppRoutes = () => {
@@ -48,6 +49,10 @@ export const AppRoutes = () => {
                 element={
                     isAuthenticated ? <Navigate to="/home" replace /> : <Login />
                 }  
+            />
+            <Route 
+                path="/register" 
+                element={<Register />}  
             />
             <Route 
                 path="/home" 

@@ -5,6 +5,7 @@ import { DrawerMenu } from './shared/components/drawer/DrawerMenu'
 import { AppRoutes } from "./shared/routes"; 
 import { BrowserRouter, Route, Routes} from "react-router-dom";
 import { Login } from './pages/login/login';
+import { Register } from './pages/register/register';
 
 
 const App: React.FC = () => {
@@ -13,7 +14,7 @@ const App: React.FC = () => {
     <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* <Route path="/register" element={<Register />} /> */}
+            <Route path="/register" element={<Register />} />
             <Route path="/*" element={<LoginWrapper />} />
           </Routes>
         </BrowserRouter>

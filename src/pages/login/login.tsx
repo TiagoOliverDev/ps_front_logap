@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { LabelLogin } from '../../shared/components/label/LabelLogin';
 import { AlertDinamic } from '../../shared/components/alert/AlertDinamic';
+import { Link as RouterLink } from 'react-router-dom'; 
 
 
 const logo = 'logoLogin.png'
@@ -131,6 +132,11 @@ export const Login: React.FC = () => {
                     </Button>
                   </Box>
                 </CardActions>
+                <Box className="mt-1 w-full flex justify-center">
+                  <RouterLink to="/register" style={{ textDecoration: 'none' }}>
+                    <Button variant="text" style={{ color: '#02274F' }}>Don't have an account? Sign up</Button>
+                  </RouterLink>
+                </Box>
               </form>
             </Box>
           </CardContent>
