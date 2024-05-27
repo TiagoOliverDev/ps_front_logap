@@ -10,3 +10,10 @@ export interface INewSupplier {
     email: string;
     phone: string;
 }
+
+export interface ISupplierFormModalProps {
+    open: boolean;
+    onClose: () => void;
+    onSave: (name: string, email: string, phone: string) => void;
+}
+

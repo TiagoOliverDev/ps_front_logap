@@ -1,3 +1,3 @@
 export interface IMenuLateralProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, CardActions, TextField, Button, Container, Grid } from '@mui/material';
 import { HomeMaster } from '../../shared/layouts/HomeMaster';
 import { Search, Favorite, ShoppingCart } from '@mui/icons-material';
-import { CategoriesService } from '../../shared/services/api/categories/Categories'; 
+import { CategoriesService } from '../../shared/services/api/categories/CategoriesService'; 
 import { ICategory } from '../../@types/IApiResponseCategories'; 
 import { IProduct } from '../../@types/IApiResponseProducts';
 import { ProductsService } from '../../shared/services/api/products/ProductsService';
@@ -91,8 +91,10 @@ export const Home: React.FC = () => {
                             <Card style={{borderRadius: '11px', backgroundColor: '#000000'}} >
                                 <img src='imgPadrao.png' alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                                 <CardContent>
-                                    <Typography style={{color: '#616161'}} variant="h6">{product.name}</Typography>
-                                    <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">R$ {product.sale_price}</Typography>
+                                    <Typography style={{color: '#616161'}} variant="h6">Produto: {product.name}</Typography>
+                                    <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">Valor: R$ {product.sale_price}</Typography>
+                                    <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">Quantidade: {product.quantity}</Typography>
+                                    <Typography style={{color: '#616161'}} variant="body2" color="textSecondary">Fornecedor: {product.supplier_id}</Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Button startIcon={<Favorite />} size="small">Favoritar</Button>

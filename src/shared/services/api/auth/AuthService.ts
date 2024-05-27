@@ -1,10 +1,19 @@
-import { IAuthProps  } from "../../../../@types/IAuthProps";
+import { LoginResponse  } from "../../../../@types/IAuthProps";
 import { API } from "../axiosConfig";
 
+interface INewUser {
+    id: number;
+    email: string;
+  }
+  
+  interface IUserRegistration {
+    email: string;
+    password: string;
+  }
 
-const auth = async (email: string, password: string): Promise<IAuthProps | Error> => {
+const auth = async (email: string, password: string): Promise<LoginResponse | Error> => {
     try{
-        const response = await API.post<IAuthProps>("/auth/login/", { email, password });
+        const response = await API.post<LoginResponse>("/auth/login/", { email, password });
         
         if (response && response.data) {
             return response.data;
@@ -17,6 +26,20 @@ const auth = async (email: string, password: string): Promise<IAuthProps | Error
     }
 }
 
+
+const register = async (dados: IUserRegistration): Promise<INewUser | Error> => {
+    try {
+      const response = await API.post<INewUser>('/auth/register', dados);
+  
+      return response.data;
+    } catch (error) {
+      console.error(error);
+
+      return new Error("Erro desconhecido durante o registro.");
+    }
+  };
+
 export const AuthService = {
     auth,
+    register,
 };

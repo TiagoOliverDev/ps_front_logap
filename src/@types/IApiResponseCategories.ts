@@ -6,3 +6,7 @@ export interface ICategory {
 export interface IApiResponseCategories {
     data: [number, string][];
 }
+
+export interface INewCategory {
+    name: string;
+}
