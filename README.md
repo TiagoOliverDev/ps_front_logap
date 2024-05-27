@@ -84,8 +84,6 @@ install all the app dependencies on the command line run:
   npm install
   ```
 
-vá em src\shared\environment\index.ts e sete API URL BACKEND no URL_BASE
-
 ## Step 3: 
 
 Open folder project and open a terminal and run the following command:
@@ -102,6 +100,8 @@ Open folder project and open a terminal and run the following command:
   ```
   https://github.com/TiagoOliverDev/ps_backend_logap
   ```
+
+- vá em src\shared\environment\index.ts e sete API URL BACKEND do backend acima no URL_BASE
   
 <hr/>
 
