@@ -11,6 +11,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IEditSupplierModalProps } from '../../../@types/IEditSupplierModalProps';
 import { AlertDinamic } from '../alert/AlertDinamic';
+import { LabelGeneral } from '../label/LabelGeneral';
 
 
 const supplierSchema = yup.object().shape({
@@ -18,6 +19,16 @@ const supplierSchema = yup.object().shape({
     email: yup.string().email('Email inválido').required('Email é obrigatório'),
     phone: yup.number().required('Telefone é obrigatório')
 });
+
+const textFieldStyle = {
+    '& .MuiInputBase-root': {
+        borderRadius: '12px',
+        backgroundColor: '#E8F0F3'
+    },
+    '& .MuiInputLabel-root': {
+        color: 'black'
+    }
+};
 
 const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, onSave, supplier }) => {
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -76,14 +87,15 @@ const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, o
     return (
         <>
             {alertMessage && <AlertDinamic message={alertMessage} severityTipo={alertSeverity} />}
-            <Dialog open={open} onClose={onClose} PaperProps={{ sx: { backgroundColor: '#10141E', color: '#FFFFFF' } }}>
+            <Dialog open={open} onClose={onClose} PaperProps={{ sx: { width: '75vw', maxWidth: '600px', height: '50vh', backgroundColor: '#10141E', color: '#FFFFFF' } }}>
                 <DialogTitle sx={{ backgroundColor: '#10141E', color: '#FFFFFF' }}>Editar Fornecedor</DialogTitle>
                 <DialogContent sx={{ backgroundColor: '#10141E' }}>
                     <form onSubmit={formik.handleSubmit}>
+                        <LabelGeneral htmlFor='idName' title='Nome' />
                         <TextField
+                            id='idName'
                             autoFocus
                             margin="dense"
-                            label="Nome"
                             type="text"
                             fullWidth
                             name="name"
@@ -92,11 +104,12 @@ const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, o
                             onBlur={() => formik.setFieldTouched('name', true)}
                             error={formik.touched.name && Boolean(formik.errors.name)}
                             helperText={formik.touched.name && formik.errors.name}
-                            sx={{label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px' }}
+                            sx={textFieldStyle}
                         />
+                        <LabelGeneral htmlFor='idEmail' title='Email' />
                         <TextField
+                            id='idEmail'
                             margin="dense"
-                            label="Email"
                             type="email"
                             fullWidth
                             name="email"
@@ -105,11 +118,12 @@ const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, o
                             onBlur={() => formik.setFieldTouched('email', true)}
                             error={formik.touched.email && Boolean(formik.errors.email)}
                             helperText={formik.touched.email && formik.errors.email}
-                            sx={{ label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px' }}
+                            sx={textFieldStyle}
                         />
+                        <LabelGeneral htmlFor='idPhone' title='Telefone' />
                         <TextField
+                            id='idPhone'
                             margin="dense"
-                            label="Telefone"
                             type="tel"
                             fullWidth
                             name="phone"
@@ -118,9 +132,9 @@ const SupplierEditModal: React.FC<IEditSupplierModalProps> = ({ open, onClose, o
                             onBlur={() => formik.setFieldTouched('phone', true)}
                             error={formik.touched.phone && Boolean(formik.errors.phone)}
                             helperText={formik.touched.phone && formik.errors.phone}
-                            sx={{ label: { color: 'black' }, backgroundColor: '#E8F0F3', borderRadius: '12px', marginTop: '18px' }}
+                            sx={textFieldStyle}
                         />
-                        <DialogActions sx={{ backgroundColor: '#10141E' }}>
+                        <DialogActions sx={{ backgroundColor: '#10141E', marginTop: '9px' }}>
                             <Button variant='outlined' onClick={onClose} color="error">
                                 Cancelar
                             </Button>
