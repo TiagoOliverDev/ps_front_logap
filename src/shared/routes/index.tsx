@@ -1,12 +1,20 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Home, Products, Suppliers, Dashboard } from '../../pages';
 import { useEffect } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
-import { useAppDrawerContext } from "../contexts";
+import { useAppDrawerContext, useAuthContext } from "../contexts";
+import { Login } from '../../pages/login/login'; 
+import { IPrivateRouteProps } from '../../@types/IPrivateRouteProps';
 
 
 export const AppRoutes = () => {
     const { setDrawerOption } = useAppDrawerContext();
+
+    const { isAuthenticated } = useAuthContext();
+  
+    const PrivateRoute: React.FC<IPrivateRouteProps> = ({ isAuthenticated, children }) => {
+        return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+    };
 
     useEffect(() => {
         setDrawerOption([
@@ -35,11 +43,57 @@ export const AppRoutes = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/fornecedores" element={<Suppliers />} />
-            <Route path="/produtos" element={<Products />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route 
+                path="/login" 
+                element={
+                    isAuthenticated ? <Navigate to="/home" replace /> : <Login />
+                }  
+            />
+            <Route 
+                path="/home" 
+                element={
+                    <PrivateRoute isAuthenticated={isAuthenticated}>
+                        <Home />
+                    </PrivateRoute>
+                } 
+            />
+            <Route 
+                path="/" 
+                element={<Navigate to={isAuthenticated ? "/home" : "/login"} replace />} 
+            />
+            <Route 
+                path="/fornecedores" 
+                element={
+                    <PrivateRoute isAuthenticated={isAuthenticated}>
+                        <Suppliers />
+                    </PrivateRoute>
+                } 
+            />
+            <Route 
+                path="/produtos" 
+                element={
+                    <PrivateRoute isAuthenticated={isAuthenticated}>
+                        <Products />
+                    </PrivateRoute>
+                } 
+            />
+            <Route 
+                path="/dashboard" 
+                element={
+                    <PrivateRoute isAuthenticated={isAuthenticated}>
+                        <Dashboard />
+                    </PrivateRoute>
+                } 
+            />
         </Routes>
+
+        // <Routes>
+        //     <Route path="/login" element={<Login />} />
+        //     <Route path="/" element={<Home />} />
+        //     <Route path="/home" element={<Home />} />
+        //     <Route path="/fornecedores" element={<Suppliers />} />
+        //     <Route path="/produtos" element={<Products />} />
+        //     <Route path="/dashboard" element={<Dashboard />} />
+        // </Routes>
     );
 };

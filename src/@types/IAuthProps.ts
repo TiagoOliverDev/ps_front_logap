@@ -10,12 +10,11 @@ interface IUser {
     role: string;
   }
     
-  interface ITokens {
-    refresh: string;
-    access: string;
-  }
-    
   export interface IAuthProps {
     user: IUser;
-    tokens: ITokens;
+  }
+
+  export interface LoginResponse {
+    access_token: string;
+    token_type: string;
   }

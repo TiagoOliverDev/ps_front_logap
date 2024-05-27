@@ -29,7 +29,7 @@ import { SuppliersService } from '../../services/api/suppliers/SuppliersService'
 
 const columns: IColumns[] = [
     { id: 'name', label: 'Nome', minWidth: 170 },
-    { id: 'purchase_price', label: 'Preço de Compra', minWidth: 100, align: 'right', format: (value: number) => value.toFixed(2) },
+    { id: 'purchase_price', label: 'Preço de Compra', minWidth: 100, align: 'right', format: (value: number) => value.toFixed(2)},
     { id: 'quantity', label: 'Quantidade', minWidth: 100, align: 'right' },
     { id: 'sale_price', label: 'Preço de Venda', minWidth: 100, align: 'right', format: (value: number) => value.toFixed(2) },
     { id: 'category', label: 'Categoria', minWidth: 100, align: 'right' },

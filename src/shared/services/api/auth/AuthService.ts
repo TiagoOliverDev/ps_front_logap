@@ -1,10 +1,10 @@
-import { IAuthProps  } from "../../../../@types/IAuthProps";
+import { LoginResponse  } from "../../../../@types/IAuthProps";
 import { API } from "../axiosConfig";
 
 
-const auth = async (email: string, password: string): Promise<IAuthProps | Error> => {
+const auth = async (email: string, password: string): Promise<LoginResponse | Error> => {
     try{
-        const response = await API.post<IAuthProps>("/auth/login/", { email, password });
+        const response = await API.post<LoginResponse>("/auth/login/", { email, password });
         
         if (response && response.data) {
             return response.data;
