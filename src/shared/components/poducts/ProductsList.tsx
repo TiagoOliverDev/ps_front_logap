@@ -32,8 +32,8 @@ const columns: IColumns[] = [
     { id: 'purchase_price', label: 'Preço de Compra', minWidth: 100, align: 'right', format: (value: number) => value.toFixed(2) },
     { id: 'quantity', label: 'Quantidade', minWidth: 100, align: 'right' },
     { id: 'sale_price', label: 'Preço de Venda', minWidth: 100, align: 'right', format: (value: number) => value.toFixed(2) },
-    { id: 'category_id', label: 'Categoria ID', minWidth: 100, align: 'right' },
-    { id: 'supplier_id', label: 'Fornecedor ID', minWidth: 100, align: 'right' },
+    { id: 'category', label: 'Categoria', minWidth: 100, align: 'right' },
+    { id: 'supplier', label: 'Fornecedor', minWidth: 100, align: 'right' },
     { id: 'actions', label: 'Ações', minWidth: 100, align: 'center' }
 ];
 
@@ -188,33 +188,41 @@ const ProductsList: React.FC = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((product) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={product.id} sx={{ color: '#616161' }}>
-                                        {columns.map((column) => {
-                                            const value = product[column.id as keyof typeof product];
-                                            return (
-                                                <TableCell key={column.id} align={column.align} sx={{ color: '#616161' }}>
-                                                    {column.id === 'actions' ? (
-                                                        <Box display="flex" justifyContent="center">
-                                                            <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(product.id)}>
-                                                                <Edit sx={{ color: '#0069D9' }} />
-                                                            </IconButton>
-                                                            <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(product.id)}>
-                                                                <Delete sx={{ color: 'red' }} />
-                                                            </IconButton>
-                                                        </Box>
-                                                    ) : column.format && typeof value === 'number' ? (
-                                                        column.format(value)
-                                                    ) : (
-                                                        value
-                                                    )}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
+                      
+                        {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((product) => {
+                            return (
+                                <TableRow hover role="checkbox" tabIndex={-1} key={product.id} sx={{ color: '#616161' }}>
+                                    {columns.map((column) => {
+                                        let value = product[column.id as keyof typeof product];
+                                        if (column.id === 'category') {
+                                            const category = categories.find(c => c.id === product.category_id);
+                                            value = category ? category.name : 'Não especificado';
+                                        } else if (column.id === 'supplier') {
+                                            const supplier = suppliers.find(s => s.id === product.supplier_id);
+                                            value = supplier ? supplier.name : 'Não especificado';
+                                        }
+                                        return (
+                                            <TableCell key={column.id} align={column.align} sx={{ color: '#616161' }}>
+                                                {column.id === 'actions' ? (
+                                                    <Box display="flex" justifyContent="center">
+                                                        <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(product.id)}>
+                                                            <Edit sx={{ color: '#0069D9' }} />
+                                                        </IconButton>
+                                                        <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(product.id)}>
+                                                            <Delete sx={{ color: 'red' }} />
+                                                        </IconButton>
+                                                    </Box>
+                                                ) : column.format && typeof value === 'number' ? (
+                                                    column.format(value)
+                                                ) : (
+                                                    value
+                                                )}
+                                            </TableCell>
+                                        );
+                                    })}
+                                </TableRow>
+                            );
+                        })}
                         </TableBody>
                     </Table>
                 </TableContainer>

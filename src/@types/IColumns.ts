@@ -1,5 +1,5 @@
 export interface IColumns {
-    id: 'name' | 'purchase_price' | 'quantity' | 'sale_price' | 'category_id' | 'supplier_id' | 'actions';
+    id: 'name' | 'purchase_price' | 'quantity' | 'sale_price' | 'category' | 'supplier' | 'actions';
     label: string;
     minWidth?: number;
     align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
