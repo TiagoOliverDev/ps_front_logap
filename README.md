@@ -11,7 +11,7 @@ Cadastro
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/register.png)
 
 Home
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/home.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/home2.png)
 
 Página de Fornecedores (gestão)
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/fornecedoress.png)
@@ -23,16 +23,16 @@ Modal de edição
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdEditarFornecedor.png)
 
 Modal de exclusão
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdExcluir.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/mdExcluir2.png)
 
 Página de produtos (gestão)
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/produtos.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/produtos2.png)
 
 Página de dashboard e relatório (gestão)
 ![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/dashboard.png)
 
 Exemplo de relatório
-![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/relatorios.png)
+![background](https://github.com/TiagoOliverDev/ps_front_logap/blob/main/public/relatorios2.png)
 
 
 <hr/>
